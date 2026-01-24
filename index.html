@@ -51,7 +51,6 @@
       line-height: 1;
     }
     
-    
     .edit-btn {
       font-size: 8px;
       padding: 1px 1px;
@@ -59,6 +58,63 @@
       background: #fff;
       border: 1px solid #888;
     }    
+    .spitzen-btn {
+      padding: 12px 20px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #888;
+      cursor: pointer;
+      background: #f5f5f5;
+      min-width: 200px;  
+    }
+
+    .spitzen-btn.active {
+      background: #2196F3;
+      color: white;
+      font-weight: bold;
+    }
+
+    .spitze-btn {
+      padding: 8px 14px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #888;
+      background: #f5f5f5;
+      cursor: pointer;
+      min-width: 50px;
+    }
+
+    .spitze-btn.active {
+      background: #2196F3;
+      color: white;
+      font-weight: bold;
+    }
+
+    .gw-btn {
+      display: inline-block;
+      margin-right: 5px;
+      font-size: 16px;
+      padding: 6px 10px;
+      cursor: pointer;
+      border-radius: 6px;
+      height: 80px;
+      min-width: 90px;
+      box-sizing: border-box;
+      border: 1px solid #888;
+      background-color: #fff;
+      color: #000;
+      font-weight: normal;
+      line-height: normal;
+      width: auto;
+      overflow: hidden;
+    }
+
+    .gw-btn.active {
+      background: #4CAF50;
+      color: #fff;
+      font-weight: bold;
+    }
+
     .result-row td {
       background-color: #f8f8f8;
       font-weight: bold;
@@ -84,38 +140,37 @@
       border-bottom: 1px solid #333;
       background: transparent;
     }
-#skat-table thead th {
-  position: sticky;
-  background: #f0f0f0; /* Hintergrundfarbe unbedingt setzen */
-  border-bottom: 2px solid #ccc;
-  text-align: center;                                        
-  padding: 4px 6px;
-  z-index: 2;
-}
+    #skat-table thead th {
+      position: sticky;
+      background: #f0f0f0;
+      border-bottom: 2px solid #ccc;
+      text-align: center;
+      padding: 4px 6px;
+      z-index: 2;
+    }
 
-/* Erste Zeile fixieren */
-#skat-table thead tr:nth-child(1) th {
-  top: 0;
-  z-index: 3;
-}
+    #skat-table thead tr:nth-child(1) th {
+      top: 0;
+      z-index: 3;
+    }
 
-/* Zweite Zeile fixieren direkt unter der ersten */
-#skat-table thead tr:nth-child(2) th {
-  top: 30px; /* Höhe der ersten Zeile anpassen */
-  z-index: 2;
-}
-#skat-table tfoot {
-  position: sticky;
-  bottom: 0;  /* Fixiert am unteren Rand des Scrollcontainers */
-  z-index: 3; /* Damit der Fuß über den Datenzeilen liegt */
-}
+    #skat-table thead tr:nth-child(2) th {
+      top: 30px;
+      z-index: 2;
+    }
 
-#skat-table tfoot td {
-  background: #f0f0f0;
-  border-top: 2px solid #ccc;
-  padding: 4px 6px;
-  text-align: center;
-}
+    #skat-table tfoot {
+      position: sticky;
+      bottom: 0;
+      z-index: 3;
+    }
+
+    #skat-table tfoot td {
+      background: #f0f0f0;
+      border-top: 2px solid #ccc;
+      padding: 4px 6px;
+      text-align: center;
+    }
 
   </style>
 </head>
@@ -123,12 +178,19 @@
 
 <div class="header">
   <span>1. Sintherner Skatclub 1992 e.V.</span>
-  <span>Serie: <input type="text" value="2" size="4"></span>
+  <span>Serie: <input type="text" value="" size="4"></span>
   <span>Tisch: <input type="text" size="6"></span>
   <span>Datum: <input type="text" size="12"></span>
 </div>
 
-<div class="table-wrapper" style="max-height:600x; overflow-y:auto;">
+<div id="spieler-buttons-container" style="margin-bottom:10px; display:flex; gap:10px;">
+  <div id="player-btn-container-1"></div>
+  <div id="player-btn-container-2"></div>
+  <div id="player-btn-container-3"></div>
+  <div id="player-btn-container-4"></div>
+</div>
+
+<div class="table-wrapper" style="max-height:600px; overflow-y:auto;">
 <table id="skat-table">
   <thead>
     <tr>
@@ -170,80 +232,93 @@
     </tr>
   </thead>
   <tbody id="game-rows">
-    <!-- Die 36 Zeilen werden per JavaScript eingefügt -->
   </tbody>
-<tfoot>
-  <tr>
-    <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">Spielpunkte:
-    </th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-    <th></th>
-  </tr>
-  <tr>
-    <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">+ (gewonnene Spiele - verlorene Spiele) x 50
-    </th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-    <th></th>
-  </tr>
-  <tr>
-    <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">+ verlorene Spiele der Gegenspieler x 30
-    </th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-    <th></th>
-  </tr>
-  <tr>
-    <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">Gesamtpunkte:
-    </th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>      
-    <th></th>
-  </tr>
-</tfoot>
-  
+  <tfoot>
+    <tr>
+      <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">Spielpunkte:
+      </th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">+ (gewonnene Spiele - verlorene Spiele) x 50
+      </th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">+ verlorene Spiele der Gegenspieler x 30
+      </th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">Gesamtpunkte:
+      </th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>      
+      <th></th>
+    </tr>
+  </tfoot>
 </table>
 </div>
 
-<dialog id="spiel-dialog" style="padding:20px; border-radius:8px; width:700px; max-width:90%; font-size:15px;">
-  <form method="dialog" id="spiel-form" style="display:flex; flex-direction:column; gap:15px;">
-    <h3 style="margin:0 0 10px 0; text-align:center;">Spiel eintragen</h3>
+<dialog id="spiel-dialog" style="padding:20px; border-radius:8px; width:615px; max-width:90%; font-size:15px;">
+  <form method="dialog" id="spiel-form" style="display:flex; flex-direction:column; gap:10px;">
+    <h3 style="margin:0 0 5px 0; text-align:center;">Spiel eintragen:<span id="spielnummer-display"></span></h3>
+
+    <div id="player-buttons" style="margin-bottom:5px;"></div>
     
-    <!-- Grundwert-Auswahl -->
-	<div id="grundwert-buttons" style="display:flex; flex-wrap:wrap; gap:8px;">
-	  <button type="button" onclick="setGrundwert('Grand')" style="padding:12px 18px; font-size:16px; min-width:70px; border-radius:6px;">Grand</button>
-	  <button type="button" onclick="setGrundwert('♣')" style="padding:12px 18px; font-size:24px; min-width:70px; border-radius:6px;">♣</button>
-	  <button type="button" onclick="setGrundwert('♠')" style="padding:12px 18px; font-size:24px; min-width:70px; border-radius:6px;">♠</button>
-	  <button type="button" onclick="setGrundwert('♥')" style="padding:12px 18px; font-size:24px; min-width:70px; border-radius:6px;">♥</button>
-	  <button type="button" onclick="setGrundwert('♦')" style="padding:12px 18px; color:red; font-size:24px; min-width:70px; border-radius:6px;">♦</button>
-	  <button type="button" onclick="setGrundwert('Null')" style="padding:12px 18px; font-size:16px; min-width:70px; border-radius:6px;">Null</button>
-	  <button type="button" onclick="setGrundwert('Eingepasst')" style="padding:12px 18px; font-size:16px; min-width:70px; border-radius:6px;">Pass</button>
-	</div>
-      <input type="text" id="grundwert" style="padding:6px;" readonly placeholder="Bitte wählen">
+    <div id="grundwert-buttons" style="display:flex; flex-wrap:wrap; gap:8px;">
+      <button type="button" onclick="setGrundwert('Grand')" style="padding:12px 18px; font-size:16px; min-width:80px; border-radius:6px;">Grand</button>
+      <button type="button" onclick="setGrundwert('♣')" style="padding:12px 18px; font-size:48px; min-width:80px; border-radius:6px;">♣</button>
+      <button type="button" onclick="setGrundwert('♠')" style="padding:12px 18px; font-size:48px; height:80px; min-width:80px; border-radius:6px;">♠</button>
+      <button type="button" onclick="setGrundwert('♥')" style="padding:12px 18px; color:red;font-size:48px; min-width:80px; border-radius:6px;">♥</button>
+      <button type="button" onclick="setGrundwert('♦')" style="padding:12px 18px; color:red; font-size:48px; min-width:80px; border-radius:6px;">♦</button>
+      <button type="button" onclick="setGrundwert('Null')" style="padding:12px 18px; font-size:16px; min-width:80px; border-radius:6px;">Null</button>
+      <button type="button" onclick="setGrundwert('Pass')" style="padding:12px 18px; font-size:16px; min-width:80px; border-radius:6px;">Pass</button>
+    </div>
+   
+    <div id="spitzen-buttons" style="display:flex; gap:10px; margin-top:5px;height: 80px">
+      <button type="button" onclick="setSpitzen(true)" class="spitzen-btn">
+        mit Spitzen
+      </button>
+      <button type="button" onclick="setSpitzen(false)" class="spitzen-btn">
+        ohne Spitzen
+      </button>
+    </div>
+    <div id="spitzen-anzahl" style="display:none; flex-wrap:wrap; gap:6px; margin-top:5px;height: 80px"></div>
+    <div id="gewinnstufen-buttons" style="display:flex; flex-wrap:wrap; gap:6px;min-height:80px;"></div>
+
+    <div style="margin-top:10px;">
+      <input type="text" id="grundwert" style="padding:8px; width:100%; text-align:center; font-weight:bold;" readonly placeholder="Bitte Spielart wählen">
     </div>
 
-    <!-- Hand, Spitzen, ohne Spitzen -->
-    <div style="display:flex; gap:10px;">
-      <label style="flex:1; display:flex; flex-direction:column;">
-        Hand
-        <input type="text" id="hand" style="padding:6px;">
-      </label>
-      <label style="flex:1; display:flex; flex-direction:column;">
+    <div style="display:flex; gap:10px; margin-top:8px;">
+      <label style="flex:1; display:flex; flex-direction:column; text-align:center;">
         Mit Spitzen
-        <input type="number" id="mitSpitzen" style="padding:6px;">
+        <input type="number" id="mitSpitzen" min="0" max="11" style="padding:6px; text-align:center;">
       </label>
-      <label style="flex:1; display:flex; flex-direction:column;">
+      <label style="flex:1; display:flex; flex-direction:column; text-align:center;">
         Ohne Spitzen
-        <input type="number" id="ohneSpitzen" style="padding:6px;">
+        <input type="number" id="ohneSpitzen" min="0" max="11" style="padding:6px; text-align:center;">
       </label>
     </div>
 
-    <!-- Buttons Speichern/Abbrechen -->
-    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
-      <button type="button" onclick="closeSpielDialog()" style="padding:6px 12px; border-radius:4px; border:1px solid #888; background:#eee; font-size:15px;">Abbrechen</button>
-      <button type="submit" style="padding:6px 12px; border-radius:4px; border:none; background:#4CAF50; color:white; font-size:15px;">Speichern</button>
+    <!-- ── NEUE BUTTONS ─────────────────────────────────────────────── -->
+    <div style="display:flex; gap:16px; margin-top:20px; justify-content:center;">
+      <button type="button" id="btn-gewonnen" 
+              style="padding:16px 40px; font-size:20px; font-weight:bold; border:none; border-radius:8px; 
+                     background:#4CAF50; color:white; cursor:pointer; min-width:180px;">
+        Gewonnen
+      </button>    
+      <button type="button" id="btn-verloren" 
+              style="padding:16px 40px; font-size:20px; font-weight:bold; border:none; border-radius:8px; 
+                     background:#e53935; color:white; cursor:pointer; min-width:180px;">
+        Verloren
+      </button>
+
     </div>
   </form>
 </dialog>
 
 
-
 <script>
-// Tabelle befüllen
-// Beispiel-Array - 36 Einträge vorbereiten
 const spielDaten = Array(36).fill(null).map((_, i) => ({
   nr: i + 1,
   grundwert: "", hand: "", schneider: "", schwarz: "", 
@@ -254,7 +329,9 @@ const spielDaten = Array(36).fill(null).map((_, i) => ({
   p2_punkte: "", p2_gew: "", p2_verl: "",
   p3_punkte: "", p3_gew: "", p3_verl: "",
   p4_punkte: "", p4_gew: "", p4_verl: "",
-  eingepasst: ""
+  p1_delta: "", p2_delta: "", p3_delta: "", p4_delta: "",
+  eingepasst: "",
+  spieler: ""
 }));
 
 function fillTable() {
@@ -262,18 +339,116 @@ function fillTable() {
   tbody.innerHTML = "";
 
   let buttonInserted = false;
+  let summen = [0, 0, 0, 0];  // 0 = Platz 1, 1 = Platz 2, 2 = Platz 3, 3 = Platz 4
 
   spielDaten.forEach((data, i) => {
+    const isEmpty = !data.grundwert && !data.hand && !data.schneider && 
+                    !data.schneiderang && !data.schwarz && !data.schwarzang && !data.offen;
 
-    const isEmpty = !data.grundwert && !data.hand;
-
-    // 🔹 Button vor der ersten leeren Zeile einfügen
     if (isEmpty && !buttonInserted) {
-      createButtonRow(i); // i = Index des Spiels nach dem Button
+      createButtonRow(i);
       buttonInserted = true;
     }
 
-    // 🔹 Spiel-Zeile einfügen
+    // Delta addieren – unabhängig davon, ob wir es anzeigen oder nicht
+    if (!isEmpty) {
+      for (let pos = 1; pos <= 4; pos++) {
+        const deltaKey = `p${pos}_delta`;
+        const delta = parseInt(data[deltaKey]) || 0;
+        summen[pos - 1] += delta;
+      }
+    }
+
+    const row = document.createElement("tr");
+    row.classList.add("data-row");
+    row.dataset.nr = data.nr;
+
+    // Nur die Punkte des Alleinspielers dieses Spiels anzeigen
+    let p1Punkte = "";
+    let p2Punkte = "";
+    let p3Punkte = "";
+    let p4Punkte = "";
+
+    if (!isEmpty && data.spieler) {
+      const spielerPos = data.spieler; // 1 bis 4
+      if (spielerPos === 1) p1Punkte = summen[0];
+      if (spielerPos === 2) p2Punkte = summen[1];
+      if (spielerPos === 3) p3Punkte = summen[2];
+      if (spielerPos === 4) p4Punkte = summen[3];
+    }
+
+    row.innerHTML = `
+      <td>${data.nr}</td>
+      <td>${data.grundwert || ""}</td>
+      <td>${data.mitSpitzen || ""}</td>
+      <td>${data.ohneSpitzen || ""}</td>
+      <td>${data.hand || ""}</td>
+      <td>${data.schneider || ""}</td>
+      <td>${data.schneiderang || ""}</td>
+      <td>${data.schwarz || ""}</td>
+      <td>${data.schwarzang || ""}</td>
+      <td>${data.offen || ""}</td>
+      <td>${data.pluswert || ""}</td>
+      <td>${data.minuswert ? `<span style="color:red;">${data.minuswert}</span>` : ""}</td>
+
+      <td>${p1Punkte}</td>
+      <td>${data.p1_gew || ""}</td>
+      <td>${data.p1_verl || ""}</td>
+
+      <td>${p2Punkte}</td>
+      <td>${data.p2_gew || ""}</td>
+      <td>${data.p2_verl || ""}</td>
+
+      <td>${p3Punkte}</td>
+      <td>${data.p3_gew || ""}</td>
+      <td>${data.p3_verl || ""}</td>
+
+      <td>${p4Punkte}</td>
+      <td>${data.p4_gew || ""}</td>
+      <td>${data.p4_verl || ""}</td>
+
+      <td>${data.eingepasst || ""}</td>
+      <td>
+        ${isEmpty ? "" : `<button class="edit-btn" onclick="openNewModal(${data.nr-1})">Edit</button>`}
+      </td>
+    `;
+
+    // dein Styling für Streifen
+    const colMap = [13, 16, 19, 22];
+    const mod = (data.nr - 1) % 4;
+    row.querySelector(`td:nth-child(${colMap[mod]})`).style.background =
+      "repeating-linear-gradient(-45deg, #ddd, #ddd 3px, #fff 3px, #fff 6px)";
+
+    tbody.appendChild(row);
+  });
+
+  updatePlayerNamesInTable();
+}
+
+function fillTable_alt() {
+  const tbody = document.getElementById("game-rows");
+  tbody.innerHTML = "";
+
+  let buttonInserted = false;
+  let summen = [0, 0, 0, 0];   // laufende Punktestände für Platz 1–4
+
+  spielDaten.forEach((data, i) => {
+    const isEmpty = !data.grundwert && !data.hand && !data.schneider && !data.schneiderang && !data.schwarz && !data.schwarzang && !data.offen;
+
+    if (isEmpty && !buttonInserted) {
+      createButtonRow(i);
+      buttonInserted = true;
+    }
+    
+    // Laufende Summe aktualisieren – nur für nicht-leere Zeilen
+    if (!isEmpty) {
+      for (let pos = 1; pos <= 4; pos++) {
+        const deltaKey = `p${pos}_delta`;
+        const delta = parseInt(data[deltaKey]) || 0;
+        summen[pos - 1] += delta;
+      }
+    }
+
     const row = document.createElement("tr");
     row.classList.add("data-row");
     row.dataset.nr = data.nr;       
@@ -289,26 +464,30 @@ function fillTable() {
       <td>${data.schwarzang}</td>
       <td>${data.offen}</td>
       <td>${data.pluswert}</td>
-      <td>${data.minuswert}</td>
-      <td>${data.p1_punkte}</td>
-      <td>${data.p1_gew}</td>
-      <td>${data.p1_verl}</td>
-      <td>${data.p2_punkte}</td>
-      <td>${data.p2_gew}</td>
-      <td>${data.p2_verl}</td>
-      <td>${data.p3_punkte}</td>
-      <td>${data.p3_gew}</td>
-      <td>${data.p3_verl}</td>
-      <td>${data.p4_punkte}</td>
-      <td>${data.p4_gew}</td>
-      <td>${data.p4_verl}</td>
+<td>${data.minuswert ? `<span style="color:red;">${data.minuswert}</span>` : ""}</td>
+
+            <!-- Hier die laufenden Summen anzeigen -->
+            <td>${summen[0]}</td>
+            <td>${data.p1_gew || ""}</td>
+            <td>${data.p1_verl || ""}</td>
+
+            <td>${summen[1]}</td>
+            <td>${data.p2_gew || ""}</td>
+            <td>${data.p2_verl || ""}</td>
+
+            <td>${summen[2]}</td>
+            <td>${data.p3_gew || ""}</td>
+            <td>${data.p3_verl || ""}</td>
+
+            <td>${summen[3]}</td>
+            <td>${data.p4_gew || ""}</td>
+            <td>${data.p4_verl || ""}</td>
       <td>${data.eingepasst}</td>
       <td>
-        <button class="edit-btn" onclick="openEditModal(${data.nr})">Edit</button>
+         ${isEmpty ? "" : `<button class="edit-btn" onclick="openNewModal(${data.nr-1})">Edit</button>`}
       </td>
     `;
 
-    // 🔹 Schraffur automatisch nach Nr
     const colMap = [13, 16, 19, 22]; 
     const mod = (data.nr - 1) % 4;   
 
@@ -317,19 +496,33 @@ function fillTable() {
 
     tbody.appendChild(row);
   });
+  updatePlayerNamesInTable();  
 }
 
-// 🔹 Button-Zeile erstellen
+function closeSpielDialog() {
+  const dialog = document.getElementById("spiel-dialog");
+  if (dialog.open) {
+    dialog.close();
+  }
+}
+
+function updatePlayerNamesInTable() {
+  const ths = document.querySelectorAll("#skat-table thead tr:nth-child(1) th.player-name1, th.player-name2, th.player-name3, th.player-name4");
+  ths[0].textContent = spielerNamen[0] + " (Listenführer)";
+  ths[1].textContent = spielerNamen[1];
+  ths[2].textContent = spielerNamen[2];
+  ths[3].textContent = spielerNamen[3];
+}
+
 function createButtonRow(spielIndex) {
   const tbody = document.getElementById("game-rows");
   const btnRow = document.createElement("tr");
   btnRow.classList.add("button-row");
 
-  // Alle <th> der ersten Zeile nehmen → komplette Spaltenzahl
-  const colCount = document.querySelectorAll("#skat-table thead tr:first-child th").length+14;
+  const colCount = document.querySelectorAll("#skat-table thead tr:first-child th").length;
 
   const td = document.createElement("td");
-  td.colSpan = colCount;        // Button über alle Spalten erstrecken
+  td.colSpan = colCount;        
   td.style.textAlign = "center";
   td.style.background = "#f5f5f5";
   td.style.padding = "6px 0";
@@ -340,76 +533,497 @@ function createButtonRow(spielIndex) {
   tbody.appendChild(btnRow);
 }
 
+function berechneSpielwert(spiel) {
+    const grundwert = parseInt(spiel.grundwert) || 0;
+    if (grundwert === 0 || grundwert === "E") return 0;  // Pass oder ungültig
 
-// 🔹 Modal öffnen für bestehendes Spiel
-function openNewModal(spielIndex) {
-  const dialog = document.getElementById("spiel-dialog");
-  const spiel = spielDaten[spielIndex]; // vorhandenes Spiel
+    // ── Null-Spiele ────────────────────────────────────────────────
+    if (grundwert === 23) {
+        const hatHand   = spiel.hand === "X";
+        const hatOuvert = spiel.offen === "X";   // Ouvert = offen
 
-  document.getElementById("grundwert").value = spiel.grundwert || "";
-  document.getElementById("hand").value = spiel.hand || "";
-  document.getElementById("mitSpitzen").value = spiel.mitSpitzen || "";
-  document.getElementById("ohneSpitzen").value = spiel.ohneSpitzen || "";
+        if (hatHand && hatOuvert) return 59;
+        if (hatHand)              return 35;
+        if (hatOuvert)            return 46;
+        return 23;   // normales Null ohne Hand/Ouvert
+    }
 
-  document.getElementById("spiel-form").dataset.spielIndex = spielIndex;
-  dialog.showModal();
+    // ── Farb- und Grand-Spiele ─────────────────────────────────────
+    let multiplikator = 0;
+
+    // Jede dieser Stufen erhöht den Multiplikator um genau 1
+    if (spiel.hand        === "X") multiplikator++;
+    if (spiel.schneider   === "X") multiplikator++;
+    if (spiel.schneiderang === "X") multiplikator++;
+    if (spiel.schwarz     === "X") multiplikator++;
+    if (spiel.schwarzang  === "X") multiplikator++;
+    if (spiel.offen       === "X") multiplikator++;
+
+    // Spitzenfaktor
+    const spitzen = parseInt(spiel.mitSpitzen) || parseInt(spiel.ohneSpitzen) || 0;
+    const spitzenFaktor = spitzen + 1;   // mit 1 = ×2, mit 3 = ×4, ohne 2 = ×3, ohne 0 = ×1 usw.
+
+    // Endergebnis
+    const spielwert = grundwert * (spitzenFaktor + multiplikator);
+
+    return spielwert;
 }
 
-function closeSpielDialog() {
-  document.getElementById("spiel-dialog").close();
+function setSpitzen(isMitSpitzen) {
+  const mit = document.getElementById("mitSpitzen");
+  const ohne = document.getElementById("ohneSpitzen");
+
+  mit.value = isMitSpitzen ? "1" : "";
+  ohne.value = isMitSpitzen ? "" : "1";
+
+  document.querySelectorAll(".spitzen-btn").forEach(b =>
+    b.classList.remove("active")
+  );
+
+  document
+    .querySelectorAll("#spitzen-buttons button")
+    [isMitSpitzen ? 0 : 1]
+    .classList.add("active");
 }
 
-// 🔹 Werte aus Modal übernehmen und bestehendes Spiel aktualisieren
-document.getElementById("spiel-form").addEventListener("submit", (e) => {
-  e.preventDefault();
+function generatePlayerButtons(spielIndex) {
+  const container = document.getElementById("player-buttons");
+  container.innerHTML = "";
 
-  const index = parseInt(e.target.dataset.spielIndex, 10);
-  const spiel = spielDaten[index];
+  const führenderSpieler = (spielIndex % 4);
+  for (let i = 0; i < 4; i++) {
+    if (i === führenderSpieler) continue;
 
-  spiel.grundwert = parseInt(document.getElementById("grundwert").value) || "";
-  spiel.hand = document.getElementById("hand").value || "";
-  spiel.mitSpitzen = parseInt(document.getElementById("mitSpitzen").value) || 0;
-  spiel.ohneSpitzen = parseInt(document.getElementById("ohneSpitzen").value) || 0;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = spielerNamen[i];
+    btn.style.marginRight = "5px";
+    btn.style.fontSize = "16px";
+    btn.style.padding = "12px 18px";
+    btn.style.cursor = "pointer";
+    btn.style.width = "200px";
+    btn.style.height = "80px";
+    btn.style.borderRadius = "6px";
 
-  fillTable(); 
-  closeSpielDialog();
-});
+    const ausgewaehlter = parseInt(document.getElementById("spiel-form").dataset.ausgewaehlterSpieler, 10);
+    if (ausgewaehlter === i + 1) {
+      btn.style.background = "#4CAF50";
+      btn.style.color = "#fff";
+    }
+
+    btn.addEventListener("click", () => {
+      Array.from(container.children).forEach(b => {
+        b.style.background = "";
+        b.style.color = "#000";
+      });
+
+      btn.style.background = "#4CAF50";
+      btn.style.color = "#fff";
+
+      document.getElementById("spiel-form").dataset.ausgewaehlterSpieler = i + 1;
+    });
+
+    container.appendChild(btn);
+  }
+}
+
+const spielerNamen = ["Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4"];
+
+function generatePlayerNameButtons() {
+  for (let pos = 1; pos <= 4; pos++) {
+    const container = document.getElementById(`player-btn-container-${pos}`);
+    container.innerHTML = "";
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = spielerNamen[pos - 1];
+    btn.style.fontSize = "15px";
+    btn.style.padding = "6px 12px";
+    btn.style.cursor = "pointer";
+
+    btn.addEventListener("click", () => {
+      const name = prompt(`Name für Position ${pos} eingeben:`, btn.textContent);
+      if (name !== null && name.trim() !== "") {
+        spielerNamen[pos - 1] = name.trim();
+        btn.textContent = name.trim();
+        updatePlayerNamesInTable();
+      }
+    });
+
+    container.appendChild(btn);
+  }
+}
+
+function generateGewinnstufenButtons(spielIndex) {
+  const container = document.getElementById("gewinnstufen-buttons");
+  container.innerHTML = "";
+
+  if (spielIndex === null || spielIndex < 0) {
+    // wenn kein gültiger Index: einfach nichts anzeigen
+    return;
+  }
+
+  const data = spielDaten[spielIndex];
+  const grundwert = document.getElementById("grundwert").value;
+
+  if (!grundwert || grundwert === "Pass" || grundwert === "E") return;
+
+  const MAP = {
+    "Hand": "hand",
+    "Schneider": "schneider",
+    "Schn.ang.": "schneiderang",
+    "Schwarz": "schwarz",
+    "Schw.ang.": "schwarzang",
+    "Ouvert": "offen"
+  };
+
+  const buttons =
+    grundwert == 23
+      ? ["Hand", "Ouvert"]
+      : ["Hand", "Schneider", "Schn.ang.", "Schwarz", "Schw.ang.", "Ouvert"];
+
+  buttons.forEach(label => {
+    const key = MAP[label];
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "gw-btn";
+    btn.innerHTML = label.replace(".", ".<br>");
+
+    if (data[key] === "X") {
+      btn.classList.add("active");
+    }
+
+    btn.addEventListener("click", () => {
+      data[key] = data[key] === "X" ? "" : "X";
+      btn.classList.toggle("active");
+      fillTable();
+    });
+
+    container.appendChild(btn);
+  });
+}
+
+function resetButtons() {
+  document.querySelectorAll("#grundwert-buttons button").forEach(btn => {
+    btn.style.backgroundColor = "";
+    btn.style.fontWeight = "";
+    if (btn.textContent === "♥" || btn.textContent === "♦") {
+      btn.style.color = "red";
+    } else {
+      btn.style.color = "black";
+    }
+  });
+
+  document.getElementById("spitzen-buttons").style.display = "none";
+  document.getElementById("spitzen-anzahl").style.display = "none";
+  document.querySelectorAll(".spitzen-btn").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".spitze-btn").forEach(btn => btn.classList.remove("active"));
+}
+
+function renderSpitzenButtons(max) {
+  const container = document.getElementById("spitzen-anzahl");
+  container.innerHTML = "";
+  container.style.display = "flex";
+
+  for (let i = 1; i <= max; i++) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "spitze-btn";
+    btn.textContent = i;
+
+    btn.onclick = () => selectSpitze(i);
+
+    container.appendChild(btn);
+  }
+}
+
+function selectSpitze(value) {
+  const mit = document.getElementById("mitSpitzen");
+  const ohne = document.getElementById("ohneSpitzen");
+
+  if (mit.value === "1") {
+    mit.value = value;
+  } else {
+    ohne.value = value;
+  }
+
+  document.querySelectorAll(".spitze-btn").forEach(b => {
+    b.classList.toggle("active", b.textContent == value);
+  });
+}
+
 function setGrundwert(value) {
   const input = document.getElementById("grundwert");
+  const spitzenBlock = document.getElementById("spitzen-buttons");
+  const spitzenAnzahlBlock = document.getElementById("spitzen-anzahl");
+  const gewinnstufenBlock = document.getElementById("gewinnstufen-buttons");
 
-  // Feste Werte zuordnen
-  let grundwertMap = {
+  const grundwertMap = {
     "Grand": 24,
     "♣": 12,
     "♠": 11,
-    "♥": 10,   // anpassen
-    "♦": 9,   // anpassen
+    "♥": 10,
+    "♦": 9,
     "Null": 23,
-    "Eingepasst": "E"
+    "Pass": "E"
   };
 
+  // Grundwert-Zahl in das Input schreiben
   input.value = grundwertMap[value];
 
-  const buttons = document.querySelectorAll("#grundwert-buttons button");
-  buttons.forEach(btn => {
-    // Grundfarbe für Symbole
+  // Spitzen ein-/ausblenden und Anzahl setzen
+  if (value === "Null" || value === "Pass") {
+    spitzenBlock.style.display = "none";
+    spitzenAnzahlBlock.style.display = "none";
+    document.getElementById("mitSpitzen").value = "";
+    document.getElementById("ohneSpitzen").value = "";
+    document.querySelectorAll(".spitzen-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".spitze-btn").forEach(b => b.classList.remove("active"));
+  } else {
+    spitzenBlock.style.display = "flex";
+    spitzenAnzahlBlock.style.display = "flex";
+    if (value === "Grand") {
+      renderSpitzenButtons(4);
+    } else {
+      renderSpitzenButtons(11);
+    }
+  }
+
+  // Gewinnstufen-Buttons neu zeichnen – aber NUR für das aktuelle Spiel
+  gewinnstufenBlock.innerHTML = "";
+  const currentIndex = getCurrentSpielIndex();   // ← hier aktuellen Index holen
+  if (currentIndex >= 0) {
+    generateGewinnstufenButtons(currentIndex);   // ← nur diesen Index verwenden
+  }
+
+  // Grundwert-Buttons optisch markieren
+  const buttonsUI = document.querySelectorAll("#grundwert-buttons button");
+  buttonsUI.forEach(btn => {
     let baseColor = "black";
     if (btn.textContent === "♥" || btn.textContent === "♦") baseColor = "red";
 
     if (btn.textContent === value) {
-      btn.style.backgroundColor = "#4CAF50"; // markiert
-      btn.style.color = "white";             // Schriftfarbe weiß
+      btn.style.backgroundColor = "#4CAF50";
+      btn.style.color = "white";
       btn.style.fontWeight = "bold";
     } else {
-      btn.style.backgroundColor = "";        // Reset
-      btn.style.color = baseColor;           // Grundfarbe wiederherstellen
+      btn.style.backgroundColor = "";
+      btn.style.color = baseColor;
       btn.style.fontWeight = "";
     }
   });
 }
 
-// Beim Laden ausführen
-window.addEventListener("load", fillTable);
+function getCurrentSpielIndex() {
+  const idx = parseInt(document.getElementById("spiel-form").dataset.spielIndex, 10);
+  return isNaN(idx) ? -1 : idx;
+}
+
+function openNewModal(spielIndex = null) {
+  const dialog = document.getElementById("spiel-dialog");
+  const spielNummerSpan = document.getElementById("spielnummer-display");
+
+  // ── NEU: immer erstmal alles zurücksetzen ────────────────────────
+  resetButtons();           // ← ruft die bestehende Reset-Funktion auf
+  document.getElementById("grundwert").value = "";
+  document.getElementById("mitSpitzen").value = "";
+  document.getElementById("ohneSpitzen").value = "";
+  
+  if (spielIndex !== null && spielIndex >= 0) {
+    // ── Bestehendes Spiel bearbeiten ──
+    const spiel = spielDaten[spielIndex];
+    document.getElementById("grundwert").value = spiel.grundwert || "";
+    document.getElementById("mitSpitzen").value = spiel.mitSpitzen || "";
+    document.getElementById("ohneSpitzen").value = spiel.ohneSpitzen || "";
+    document.getElementById("spiel-form").dataset.spielIndex = spielIndex;
+    document.getElementById("spiel-form").dataset.ausgewaehlterSpieler = spiel.spieler || "";
+    
+    generatePlayerButtons(spielIndex);
+    generateGewinnstufenButtons(spielIndex);
+    spielNummerSpan.textContent = spiel.nr;
+
+    // Buttons für den gespeicherten Grundwert wieder aktivieren
+    const grundwertMapReverse = {
+      "24": "Grand",
+      "12": "♣",
+      "11": "♠",
+      "10": "♥",
+      "9":  "♦",
+      "23": "Null",
+      "E":  "Pass"
+    };
+    const selectedText = grundwertMapReverse[spiel.grundwert];
+    if (selectedText) {
+      setGrundwert(selectedText);   // ← wichtig: visuell wieder markieren
+    }
+    const mitSpitzenVal  = parseInt(spiel.mitSpitzen) || 0;
+    const ohneSpitzenVal = parseInt(spiel.ohneSpitzen) || 0;
+
+    if (mitSpitzenVal > 0) {
+        setSpitzen(true);
+        // Anzahl-Button markieren
+        document.querySelectorAll('#spitzen-anzahl .spitze-btn')
+            .forEach(btn => {
+                btn.classList.toggle('active', btn.textContent == mitSpitzenVal);
+            });
+    } else if (ohneSpitzenVal > 0) {
+        setSpitzen(false);
+        document.querySelectorAll('#spitzen-anzahl .spitze-btn')
+            .forEach(btn => {
+                btn.classList.toggle('active', btn.textContent == ohneSpitzenVal);
+            });
+    } else {
+        // weder mit noch ohne → beide deaktivieren
+        document.querySelectorAll(".spitzen-btn").forEach(b => b.classList.remove("active"));
+        document.getElementById("spitzen-anzahl").style.display = "none";
+    }    
+  } else {
+    // ── NEUER Eintrag ──
+    const emptyIndex = spielDaten.findIndex(s =>
+      !s.grundwert && !s.hand && !s.schneider && !s.schneiderang &&
+      !s.schwarz && !s.schwarzang && !s.offen
+    );
+    const idx = emptyIndex >= 0 ? emptyIndex : spielDaten.length - 1;
+
+    // Daten zurücksetzen
+    const s = spielDaten[idx];
+    s.grundwert = "";
+    s.hand = "";
+    s.schneider = "";
+    s.schneiderang = "";
+    s.schwarz = "";
+    s.schwarzang = "";
+    s.offen = "";
+    s.mitSpitzen = "";
+    s.ohneSpitzen = "";
+    s.spieler = "";
+
+    document.getElementById("spiel-form").dataset.spielIndex = idx;
+    document.getElementById("spiel-form").dataset.ausgewaehlterSpieler = "";
+    
+    generatePlayerButtons(idx);
+    // Gewinnstufen-Buttons bewusst leer lassen bei neuem Spiel
+    document.getElementById("gewinnstufen-buttons").innerHTML = "";
+
+    spielNummerSpan.textContent = idx + 1;
+  }
+
+  dialog.showModal();
+}
+
+
+document.getElementById("btn-gewonnen").addEventListener("click", () => {
+  saveGame(true);   // true = gewonnen
+});
+
+document.getElementById("btn-verloren").addEventListener("click", () => {
+  saveGame(false);  // false = verloren
+});
+
+function saveGame(gewonnen) {
+    const form = document.getElementById("spiel-form");
+    const index = parseInt(form.dataset.spielIndex, 10);
+    const ausgewaehlterSpieler = parseInt(form.dataset.ausgewaehlterSpieler, 10);
+
+    if (isNaN(index) || isNaN(ausgewaehlterSpieler)) {
+        alert("Bitte einen Spieler und ein Spiel auswählen.");
+        return;
+    }
+
+    const spiel = spielDaten[index];
+
+    spiel.grundwert     = document.getElementById("grundwert").value;
+    spiel.mitSpitzen    = parseInt(document.getElementById("mitSpitzen").value)    || 0;
+    spiel.ohneSpitzen   = parseInt(document.getElementById("ohneSpitzen").value)   || 0;
+    spiel.spieler       = ausgewaehlterSpieler;
+    spiel.gewonnen      = gewonnen;
+
+    const basisWert = berechneSpielwert(spiel);
+    const spielwert = basisWert * (gewonnen ? 1 : 2);   // Verloren doppelt
+
+    // Delta (Änderung) für diesen Spieler speichern
+    const delta = gewonnen ? spielwert : -spielwert;
+
+    // In der Zeile speichern (für spätere Summenberechnung)
+    const pKey = `p${ausgewaehlterSpieler}`;
+    spiel[`${pKey}_delta`] = delta;           // neu: delta statt direkte Punkte
+
+    // Gew/Verl-Zähler bleiben wie gehabt
+    spiel[`${pKey}_gew`]  = (parseInt(spiel[`${pKey}_gew`])  || 0) + (gewonnen ? 1 : 0);
+    spiel[`${pKey}_verl`] = (parseInt(spiel[`${pKey}_verl`]) || 0) + (gewonnen ? 0 : 1);
+
+    // + / - Spalte (Spielwert-Anzeige)
+    if (gewonnen) {
+        spiel.pluswert  = spielwert;
+        spiel.minuswert = "";
+    } else {
+        spiel.pluswert  = "";
+        spiel.minuswert = -spielwert;   // oder spielwert positiv, wenn du das lieber magst
+    }
+
+    fillTable();
+    closeSpielDialog();
+}
+
+function saveGame_alt(gewonnen) {
+  const index = parseInt(document.getElementById("spiel-form").dataset.spielIndex, 10);
+  const ausgewaehlterSpieler = parseInt(document.getElementById("spiel-form").dataset.ausgewaehlterSpieler, 10);
+
+  if (isNaN(index) || isNaN(ausgewaehlterSpieler)) {
+    alert("Bitte einen Spieler und ein Spiel auswählen.");
+    return;
+  }
+
+  const spiel = spielDaten[index];
+
+  // ── Übernimm die Werte aus dem Formular ─────────────────────────────
+  spiel.grundwert     = document.getElementById("grundwert").value;
+  spiel.mitSpitzen    = parseInt(document.getElementById("mitSpitzen").value)    || 0;
+  spiel.ohneSpitzen   = parseInt(document.getElementById("ohneSpitzen").value)   || 0;
+  spiel.spieler       = ausgewaehlterSpieler;
+  spiel.gewonnen      = gewonnen;   // ← neu: merken, wer gewonnen hat
+
+  	// Gewinnstufen aus Buttons übernehmen (falls noch nicht passiert)
+    // → hier nur als Beispiel – du musst das wahrscheinlich schon in generateGewinnstufenButtons machen
+    // spiel.hand        = ... (aus Button-Status)
+    // spiel.schneider   = ...
+    // usw.
+
+    // Spielwert berechnen
+    let spielwert = berechneSpielwert(spiel);
+    
+    // Verloren → doppelt (wie offizielle Regel)
+    if (!gewonnen) {
+        spielwert *= 2;
+    }    
+
+    // + / - Spalte setzen
+    if (gewonnen) {
+        spiel.pluswert  = spielwert;
+        spiel.minuswert = "";
+    } else {
+        spiel.pluswert  = "";
+        spiel.minuswert = -spielwert;   // negativ → rote Darstellung später möglich
+    }
+
+// Spieler-Punkte aktualisieren (kumulativ)
+    const pKey = `p${ausgewaehlterSpieler}`;
+    const punkteKey = `${pKey}_punkte`;
+    const gewKey    = `${pKey}_gew`;
+    const verlKey   = `${pKey}_verl`;
+
+    spiel[punkteKey] = (parseInt(spiel[punkteKey]) || 0) + (gewonnen ? spielwert : -spielwert);
+    spiel[gewKey]    = (parseInt(spiel[gewKey])    || 0) + (gewonnen ? 1 : 0);
+    spiel[verlKey]   = (parseInt(spiel[verlKey])   || 0) + (gewonnen ? 0 : 1);
+
+  fillTable();           // Tabelle aktualisieren
+  closeSpielDialog();    // Dialog schließen
+}
+
+window.addEventListener("load", () => {
+  fillTable();
+  generatePlayerNameButtons();
+});
 </script>
 
 </body>
