@@ -1353,6 +1353,10 @@ function saveGame(gewonnen) {
         alert("❌ Ouvert nur bei Hand + Schneider + Schneider Ang. + Schwarz + Schwarz Ang. möglich!");
         return;
     }    
+    if (spiel.schwarz === "X" && spiel.schneider === "") {
+        alert("❌ Schwarz nur bei Schneider möglich!");
+        return;
+    }  	
     if (spiel.schwarzang === "X" && 
     	(spiel.hand === "" || spiel.schneider === ""  || spiel.schneiderang === "" || spiel.schwarz === "")) {
         alert("❌ Schwarz angesagt nur bei Hand + Schneider + Schneider Ang. + Schwarz möglich!");
