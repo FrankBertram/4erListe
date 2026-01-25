@@ -1398,6 +1398,10 @@ function saveGame(gewonnen) {
     spiel.mitSpitzen  = mit;
     spiel.ohneSpitzen = ohne;
 
+	if (spiel.schwarz === "X" && spiel.mitSpitzen === 0) {
+        alert("❌ Schwarz ohne Kreuz Bube nicht möglich!");
+        return;
+    } 
 
     // 3. Bei Pass: nichts weiter berechnen
     if (istPass) {
