@@ -60,7 +60,9 @@
     }
 	.rechts {
 	  text-align: right !important;  /* Übersteuert th, td Standard */
-	}    
+	}   
+	
+	
 	
 .radio-group {  /* Umbenannt von serie-group für Wiederverwendung */
   display: flex;
@@ -256,27 +258,42 @@
 <body>
 
 <div class="header">
-  <span style="font-size:15px">1. Sintherner Skatclub 1992 e.V.</span>
-  <span>Serie:</span>
-  <div class="radio-group radio-group-compact">
-    <label class="radio-label"><input type="radio" name="serie" value="1" checked>1.</label>
-    <label class="radio-label"><input type="radio" name="serie" value="2">2.</label>
+  <!-- Zeile 1: Logo + Verein -->
+  <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 0px;">
+    <img src="Skat.png" alt="Skat-Logo" style="height: 40px;">
+    <span style="font-size:20px; font-weight: bold;">1. Sintherner Skatclub 1992 e.V.</span>
   </div>
   
-<span>Tisch:</span>
-<div class="radio-group radio-group-compact">
-  <label class="radio-label"><input type="radio" name="tisch" value="1" checked>1</label>
-  <label class="radio-label"><input type="radio" name="tisch" value="2">2</label>
-  <label class="radio-label"><input type="radio" name="tisch" value="3">3</label>
-  <label class="radio-label"><input type="radio" name="tisch" value="4">4</label>
-  <label class="radio-label"><input type="radio" name="tisch" value="5">5</label>
-  <label class="radio-label"><input type="radio" name="tisch" value="6">6</label>
-  <label class="radio-label"><input type="radio" name="tisch" value="7">7</label>
-</div>
+  <!-- Zeile 2: Auswahlbuttons -->
+  <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+    <span>Serie:</span>
+    <div class="radio-group radio-group-compact">
+      <label class="radio-label"><input type="radio" name="serie" value="1" checked>1.</label>
+      <label class="radio-label"><input type="radio" name="serie" value="2">2.</label>
+    </div>
+    
+    <span>Tisch:</span>
+    <div class="radio-group radio-group-compact">
+      <label class="radio-label"><input type="radio" name="tisch" value="1" checked>1</label>
+      <label class="radio-label"><input type="radio" name="tisch" value="2">2</label>
+      <label class="radio-label"><input type="radio" name="tisch" value="3">3</label>
+      <label class="radio-label"><input type="radio" name="tisch" value="4">4</label>
+      <label class="radio-label"><input type="radio" name="tisch" value="5">5</label>
+      <label class="radio-label"><input type="radio" name="tisch" value="6">6</label>
+      <label class="radio-label"><input type="radio" name="tisch" value="7">7</label>
+    </div>
+    <!-- NEU: 36er/48er Auswahl -->
+    <span>Spiele:</span>
+    <div class="radio-group radio-group-compact">
+      <label class="radio-label"><input type="radio" name="karten" value="36" checked>36</label>
+      <label class="radio-label"><input type="radio" name="karten" value="48">48</label>
+    </div>    
+  </div>
 </div>
 
+
 <div id="spieler-buttons-container" style="margin-bottom:10px; display:flex; gap:10px;">
-  <img src="Skat.png" alt="Skat-Logo">
+
   <div id="player-btn-container-1"></div>
   <div id="player-btn-container-2"></div>
   <div id="player-btn-container-3"></div>
@@ -433,7 +450,11 @@
 
 
 <script>
-const spielDaten = Array(36).fill(null).map((_, i) => ({
+let spielDaten = [];  // Leer starten
+
+// Direkt nach der Deklaration:
+const kartenDefault = 36;
+spielDaten = Array(kartenDefault).fill(null).map((_, i) => ({
   nr: i + 1,
   grundwert: "", hand: "", schneider: "", schwarz: "", 
   schneiderang: "", schwarzang: "", offen: "",
@@ -451,6 +472,8 @@ const spielDaten = Array(36).fill(null).map((_, i) => ({
 function fillTable() {
   const tbody = document.getElementById("game-rows");
   tbody.innerHTML = "";
+  
+  console.log("Test-Tabelle: " + spielDaten.length + " Zeilen");
 
   let buttonInserted = false;
 
@@ -533,7 +556,7 @@ function fillTable() {
     row.dataset.nr = data.nr;
 
     if (istEingepasst) {
-      row.style.backgroundColor = "#f8f8f8";
+      row.style.backgroundColor = "#ccc";
       row.style.fontStyle = "italic";
     }
 
@@ -730,22 +753,49 @@ function berechneSpielwert(spiel) {
 function setSpitzen(isMitSpitzen) {
   const mit = document.getElementById("mitSpitzen");
   const ohne = document.getElementById("ohneSpitzen");
+  const grundwert = document.getElementById("grundwert")?.value || "";
 
-  if (isMitSpitzen) {
-    mit.value = mit.value || "1";  // Default 1, falls leer
+    if (isMitSpitzen) {
+    mit.value = mit.value || "1";
     ohne.value = "";
   } else {
     ohne.value = ohne.value || "1";
     mit.value = "";
   }
+  
+  // Bei Eingepasst: LEER LASSEN
+  if (grundwert === "Eingepasst" || grundwert === "E") {
+    mit.value = "";
+    ohne.value = "";
+  }
 
+
+
+  // Rest unverändert...
   document.querySelectorAll(".spitzen-btn").forEach(b => b.classList.remove("active"));
   document.querySelectorAll("#spitzen-buttons button")[isMitSpitzen ? 0 : 1].classList.add("active");
 
-  // Anzahl-Buttons aktualisieren
   const aktuelleAnzahl = isMitSpitzen ? parseInt(mit.value) || 1 : parseInt(ohne.value) || 1;
   document.querySelectorAll("#spitzen-anzahl .spitze-btn").forEach(btn => {
     btn.classList.toggle("active", parseInt(btn.textContent) === aktuelleAnzahl);
+  });
+}
+
+
+
+
+function selectSpitze(value) {
+  const mit = document.getElementById("mitSpitzen");
+  const ohne = document.getElementById("ohneSpitzen");
+
+  if (mit.value === "1") {
+    mit.value = value;
+  } else {
+    ohne.value = value;
+  }
+
+  document.querySelectorAll(".spitze-btn").forEach(b => {
+    b.classList.toggle("active", b.textContent == value);
   });
 }
 
@@ -836,9 +886,8 @@ function generatePlayerNameButtons() {
       const select = document.createElement("select");
       select.style.fontSize = "15px";
       select.style.padding = "4px 8px";
-      select.style.minWidth = "250px";
-      select.style.maxWidth = "300px";
-      select.style.width = "100%";
+      select.style.minWidth = "180px";
+      select.style.maxWidth = "220px";
       select.style.marginTop = "4px";
 
       const optDefault = document.createElement("option");
@@ -958,8 +1007,9 @@ function generatePlayerNameButtons_1() {
       const select = document.createElement("select");
       select.style.fontSize = "15px";
       select.style.padding = "4px 8px";
-      select.style.minWidth = "180px";
-      select.style.maxWidth = "220px";
+      select.style.minWidth = "250px";
+      select.style.maxWidth = "300px";
+      select.style.width = "100%";
       select.style.marginTop = "4px";
 
       // Platzhalter
@@ -1097,20 +1147,7 @@ function renderSpitzenButtons(max) {
   }
 }
 
-function selectSpitze(value) {
-  const mit = document.getElementById("mitSpitzen");
-  const ohne = document.getElementById("ohneSpitzen");
 
-  if (mit.value === "1") {
-    mit.value = value;
-  } else {
-    ohne.value = value;
-  }
-
-  document.querySelectorAll(".spitze-btn").forEach(b => {
-    b.classList.toggle("active", b.textContent == value);
-  });
-}
 
 function setGrundwert(value) {
   const input = document.getElementById("grundwert");
@@ -1390,12 +1427,45 @@ function saveGame(gewonnen) {
     fillTable();
     closeSpielDialog();
 }
+document.querySelectorAll('input[name="karten"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    const kartenAnzahl = parseInt(this.value);
+    
+    // Zuerst kürzen (falls nötig)
+    if (spielDaten.length > kartenAnzahl) {
+      spielDaten.length = kartenAnzahl;
+    }
+    
+    // Dann auffüllen (wichtig!)
+    while (spielDaten.length < kartenAnzahl) {
+      spielDaten.push({
+        nr: spielDaten.length + 1,
+        grundwert: "", hand: "", schneider: "", schwarz: "", 
+        schneiderang: "", schwarzang: "", offen: "",
+        mitSpitzen: "", ohneSpitzen: "", spielwert: "",
+        pluswert: "", minuswert: "",
+        p1_punkte: "", p1_gew: "", p1_verl: "",
+        p2_punkte: "", p2_gew: "", p2_verl: "",
+        p3_punkte: "", p3_gew: "", p3_verl: "",
+        p4_punkte: "", p4_gew: "", p4_verl: "",
+        p1_delta: "", p2_delta: "", p3_delta: "", p4_delta: "",
+        eingepasst: "", spieler: "",
+        gewonnen: null  // Falls du das brauchst
+      });
+    }
+    
+    console.log(`spielDaten: ${spielDaten.length} Zeilen, letzte nr: ${spielDaten[spielDaten.length-1]?.nr}`);
+    fillTable();
+  });
+});
 
 
 window.addEventListener("load", () => {
   fillTable();
   generatePlayerNameButtons();
 });
+
+
 </script>
 
 </body>
