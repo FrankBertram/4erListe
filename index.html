@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sintherner Skatclub - Spielzettel</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 13px;
+      font-family: 'Open Sans', Arial, Helvetica, sans-serif;  /* Neu */
+      font-size: 14px;  /* Etwas größer für Touch (13px → 14px) */
+    /*  font-family: Arial, Helvetica, sans-serif;*/
+    /*  font-size: 13px;*/
       margin: 15px;
     }
     .header {
@@ -20,8 +23,8 @@
     .header span { font-weight: bold; }
     table {
       border-collapse: collapse;
-      width: 720px;
-      font-size: 11px;
+      width: 800px;
+      font-size: 14px;                                           
     }
     th, td {
       border: 1px solid #444;
@@ -46,16 +49,20 @@
       text-align: left;
       padding-left: 6px;
     }
+	.rechts {
+	  text-align: right !important;  /* Übersteuert th, td Standard */
+	}    
     .gew-verl {
       font-size: 9px;
       line-height: 1;
     }
     
     .edit-btn {
-      font-size: 8px;
+      font-size: 10px;
       padding: 1px 1px;
       cursor: pointer;
-      background: #fff;
+      background: orange;
+      color: white;
       border: 1px solid #888;
     }    
     .spitzen-btn {
@@ -155,7 +162,7 @@
     }
 
     #skat-table thead tr:nth-child(2) th {
-      top: 30px;
+      top: 25px;
       z-index: 2;
     }
 
@@ -190,25 +197,25 @@
   <div id="player-btn-container-4"></div>
 </div>
 
-<div class="table-wrapper" style="max-height:600px; overflow-y:auto;">
+<div class="table-wrapper" style="max-height:700px; overflow-y:auto;overflow-x:auto;">
 <table id="skat-table">
   <thead>
     <tr>
       <th rowspan="2" class="vertical">Lfd. Nr. Spiel</th>
-      <th rowspan="2">9 <br>10<br>11<br>12<br>23<br>24</th>
+      <th rowspan="2">9 <br>10<br>11<br>12<br>23<br>24<br>E</th>
       <th rowspan="2" class="vertical">mit Spitzen</th>
       <th rowspan="2" class="vertical">ohne Spitzen</th>
       <th colspan="6">Gewinnstufen</th>
       <th colspan="2">Spiel-<br>werte</th>
-      <th colspan="3" class="player-name1">Name (Listenführer)</th>
+      <th colspan="3" class="player-name1">Name (LF)</th>
       <th colspan="3" class="player-name2">Name</th>
       <th colspan="3" class="player-name3">Name</th>
       <th colspan="3" class="player-name4">Name</th>
       <th rowspan="2" class="vertical">Eingepasst</th>
       <th></th>
     </tr>
-    <tr>
-      <th class="vertical">Hand</th>
+    <tr style="text-align:left;">
+      <th class="vertical" >Hand</th>
       <th class="vertical">Schneider</th>
       <th class="vertical">Schn. ang.</th>
       <th class="vertical">Schwarz</th>
@@ -234,50 +241,46 @@
   <tbody id="game-rows">
   </tbody>
   <tfoot>
-<tr>
-  <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">
-    Spielpunkte:
-  </th>
-  <td id="sum-p1">0</td>           <!-- Punkte Platz 1 -->
-  <td id="gew-p1">0</td>           <!-- Gewinne Platz 1 -->
-  <td id="verl-p1">0</td>          <!-- Verluste Platz 1 -->
-
-  <td id="sum-p2">0</td>
-  <td id="gew-p2">0</td>
-  <td id="verl-p2">0</td>
-
-  <td id="sum-p3">0</td>
-  <td id="gew-p3">0</td>
-  <td id="verl-p3">0</td>
-
-  <td id="sum-p4">0</td>
-  <td id="gew-p4">0</td>
-  <td id="verl-p4">0</td>
-
-  <td id="sum-eingepasst">0</td>   <!-- Eingepasst-Zähler -->
-  <td></td>
-</tr>
+	<tr>
+	  <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">Spielpunkte:</th>
+	  <td class="rechts" id="sum-p1">0</td>           <!-- Punkte Platz 1 -->
+	  <td id="gew-p1">0</td>           <!-- Gewinne Platz 1 -->
+	  <td id="verl-p1">0</td>          <!-- Verluste Platz 1 -->
+	  <td class="rechts" id="sum-p2">0</td>
+	  <td id="gew-p2">0</td>
+	  <td id="verl-p2">0</td>
+	  <td class="rechts" id="sum-p3">0</td>
+	  <td id="gew-p3">0</td>
+	  <td id="verl-p3">0</td>
+	  <td class="rechts" id="sum-p4">0</td>
+	  <td id="gew-p4">0</td>
+	  <td id="verl-p4">0</td>
+	  <td id="sum-eingepasst">0</td>   <!-- Eingepasst-Zähler -->
+	  <td></td>
+	</tr>
     <tr>
-<th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">
-    + (gewonnene Spiele - verlorene Spiele) x 50
-  </th>
-  <td id="bonus-p1">0</td><td></td><td></td><td id="bonus-p2">0</td><td></td><td></td>
-  <td id="bonus-p3">0</td><td></td><td></td><td id="bonus-p4">0</td><td></td><td></td>
-  <td></td><td></td>
+      <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">+ (gewonnene Spiele - verlorene Spiele) x 50</th>
+      <td class="rechts" id="bonus-p1">0</td><td id="bogew-p1"></td><td></td>
+      <td class="rechts" id="bonus-p2">0</td><td id="bogew-p2"></td><td></td>
+      <td class="rechts" id="bonus-p3">0</td><td id="bogew-p3"></td><td></td>
+      <td class="rechts" id="bonus-p4">0</td><td id="bogew-p4"></td><td></td>
+      <td></td><td></td>
     </tr>
     <tr>
-      <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">+ verlorene Spiele der Gegenspieler x 30
-      </th>
-  <td id="bonus-g1">0</td><td></td><td></td><td id="bonus-g2">0</td><td></td><td></td>
-  <td id="bonus-g3">0</td><td></td><td></td><td id="bonus-g4">0</td><td></td><td></td>
-  <td></td><td></td>
+      <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">+ verlorene Spiele der Gegenspieler x 30</th>
+      <td class="rechts" id="bonus-g1">0</td><td id="bogew-g1"></td><td></td>
+      <td class="rechts" id="bonus-g2">0</td><td id="bogew-g2"></td><td></td>
+      <td class="rechts" id="bonus-g3">0</td><td id="bogew-g3"></td><td></td>
+      <td class="rechts" id="bonus-g4">0</td><td id="bogew-g4"></td><td></td>
+      <td></td><td></td>
     </tr>
     <tr>
-      <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">Gesamtpunkte:
-      </th>
-  <td id="gesamt-p1">0</td><td></td><td></td><td id="gesamt-p2">0</td><td></td><td></td>
-  <td id="gesamt-p3">0</td><td></td><td></td><td id="gesamt-p4">0</td><td></td><td></td>
-  <td></td><td></td>
+      <th colspan="12" style="text-align:center; background:#f0f0f0; font-weight:bold;">Gesamtpunkte:</th>
+      <td class="rechts" id="gesamt-p1">0</td><td></td><td></td>
+      <td class="rechts" id="gesamt-p2">0</td><td></td><td></td>
+      <td class="rechts" id="gesamt-p3">0</td><td></td><td></td>
+      <td class="rechts" id="gesamt-p4">0</td><td></td><td></td>
+      <td></td><td></td>
     </tr>
   </tfoot>
 </table>
@@ -462,19 +465,19 @@ function fillTable() {
       <td>${data.pluswert || ""}</td>
       <td>${data.minuswert ? `<span style="color:red;">${data.minuswert}</span>` : ""}</td>
 
-      <td>${p1Punkte}</td>
+      <td class="rechts">${p1Punkte}</td>
       <td>${p1Gew}</td>
       <td>${p1Verl}</td>
 
-      <td>${p2Punkte}</td>
+      <td class="rechts">${p2Punkte}</td>
       <td>${p2Gew}</td>
       <td>${p2Verl}</td>
 
-      <td>${p3Punkte}</td>
+      <td class="rechts">${p3Punkte}</td>
       <td>${p3Gew}</td>
       <td>${p3Verl}</td>
 
-      <td>${p4Punkte}</td>
+      <td class="rechts">${p4Punkte}</td>
       <td>${p4Gew}</td>
       <td>${p4Verl}</td>
 
@@ -524,6 +527,10 @@ function fillTable() {
   document.getElementById("bonus-p2").textContent = bonusP2 || 0;
   document.getElementById("bonus-p3").textContent = bonusP3 || 0;
   document.getElementById("bonus-p4").textContent = bonusP4 || 0;
+  document.getElementById("bogew-p1").textContent = gewinnZaehler[0] - verlustZaehler[0] || 0;
+  document.getElementById("bogew-p2").textContent = gewinnZaehler[1] - verlustZaehler[1] || 0;
+  document.getElementById("bogew-p3").textContent = gewinnZaehler[2] - verlustZaehler[2] || 0;
+  document.getElementById("bogew-p4").textContent = gewinnZaehler[3] - verlustZaehler[3] || 0;
   
     // Bonus-Zeile: (verl Gegner) × 30
   const bonusG1 = (verlustZaehler[1]+verlustZaehler[2]+verlustZaehler[3]) * 30;
@@ -535,6 +542,10 @@ function fillTable() {
   document.getElementById("bonus-g2").textContent = bonusG2 || 0;
   document.getElementById("bonus-g3").textContent = bonusG3 || 0;
   document.getElementById("bonus-g4").textContent = bonusG4 || 0;
+  document.getElementById("bogew-g1").textContent = verlustZaehler[1]+verlustZaehler[2]+verlustZaehler[3] || 0;
+  document.getElementById("bogew-g2").textContent = verlustZaehler[0]+verlustZaehler[2]+verlustZaehler[3] || 0;
+  document.getElementById("bogew-g3").textContent = verlustZaehler[0]+verlustZaehler[1]+verlustZaehler[3] || 0;
+  document.getElementById("bogew-g4").textContent = verlustZaehler[0]+verlustZaehler[1]+verlustZaehler[2] || 0;
   
   const gesamtP1 = punkteSummen[0] + bonusP1 +bonusG1;
   const gesamtP2 = punkteSummen[1] + bonusP2 +bonusG2;
@@ -569,7 +580,7 @@ function closeSpielDialog() {
 
 function updatePlayerNamesInTable() {
   const ths = document.querySelectorAll("#skat-table thead tr:nth-child(1) th.player-name1, th.player-name2, th.player-name3, th.player-name4");
-  ths[0].textContent = spielerNamen[0] + " (Listenführer)";
+  ths[0].textContent = spielerNamen[0] + " (LF)";
   ths[1].textContent = spielerNamen[1];
   ths[2].textContent = spielerNamen[2];
   ths[3].textContent = spielerNamen[3];
@@ -650,23 +661,6 @@ function setSpitzen(isMitSpitzen) {
   document.querySelectorAll("#spitzen-anzahl .spitze-btn").forEach(btn => {
     btn.classList.toggle("active", parseInt(btn.textContent) === aktuelleAnzahl);
   });
-}
-
-function setSpitzen_1(isMitSpitzen) {
-  const mit = document.getElementById("mitSpitzen");
-  const ohne = document.getElementById("ohneSpitzen");
-
-  mit.value = isMitSpitzen ? "1" : "";
-  ohne.value = isMitSpitzen ? "" : "1";
-
-  document.querySelectorAll(".spitzen-btn").forEach(b =>
-    b.classList.remove("active")
-  );
-
-  document
-    .querySelectorAll("#spitzen-buttons button")
-    [isMitSpitzen ? 0 : 1]
-    .classList.add("active");
 }
 
 function generatePlayerButtons(spielIndex) {
@@ -811,31 +805,6 @@ function generatePlayerNameButtons() {
         }
       };
       setTimeout(() => document.addEventListener("click", closeOnOutside), 0);
-    });
-
-    container.appendChild(btn);
-  }
-}
-
-function generatePlayerNameButtons_1() {
-  for (let pos = 1; pos <= 4; pos++) {
-    const container = document.getElementById(`player-btn-container-${pos}`);
-    container.innerHTML = "";
-
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = spielerNamen[pos - 1];
-    btn.style.fontSize = "15px";
-    btn.style.padding = "6px 12px";
-    btn.style.cursor = "pointer";
-
-    btn.addEventListener("click", () => {
-      const name = prompt(`Name für Position ${pos} eingeben:`, btn.textContent);
-      if (name !== null && name.trim() !== "") {
-        spielerNamen[pos - 1] = name.trim();
-        btn.textContent = name.trim();
-        updatePlayerNamesInTable();
-      }
     });
 
     container.appendChild(btn);
@@ -1206,94 +1175,6 @@ function saveGame(gewonnen) {
     } else {
         spiel.pluswert  = "";
         spiel.minuswert = -spielwert;              
-    }
-
-    fillTable();
-    closeSpielDialog();
-}
-
-function saveGame_org(gewonnen) {
-    const form = document.getElementById("spiel-form");
-    const index = parseInt(form.dataset.spielIndex, 10);
-    const neuerSpieler = parseInt(form.dataset.ausgewaehlterSpieler, 10);
-    const alterSpieler = parseInt(form.dataset.originalSpieler, 10) || 0;
-
-    if (isNaN(index)) {
-        alert("Kein gültiges Spiel ausgewählt.");
-        return;
-    }
-
-    // Bei Pass/Eingepasst darf kein Spieler ausgewählt sein → erlauben
-    let spielerGueltig = !isNaN(neuerSpieler) && neuerSpieler >= 1 && neuerSpieler <= 4;
-    const grundwert = document.getElementById("grundwert").value;
-    const istPass = (grundwert === "E" || grundwert === "Pass");
-
-    if (!spielerGueltig && !istPass) {
-        alert("Bitte einen Spieler auswählen (außer bei Pass).");
-        return;
-    }
-
-    const spiel = spielDaten[index];
-
-    // 1. Alten Zustand merken – SEHR WICHTIG!
-    const alterSpielerVorher = spiel.spieler;           // ← hier gespeichert!
-    const warGewonnen        = spiel.gewonnen;          // true / false / null
-
-    // 2. Neue Werte übernehmen
-    spiel.grundwert     = grundwert;
-    spiel.mitSpitzen    = parseInt(document.getElementById("mitSpitzen").value)    || 0;
-    spiel.ohneSpitzen   = parseInt(document.getElementById("ohneSpitzen").value)   || 0;
-    spiel.spieler       = istPass ? null : neuerSpieler;
-    spiel.gewonnen      = istPass ? null : gewonnen;
-
-    // 3. Bei Pass: nichts weiter berechnen
-    if (istPass) {
-        spiel.pluswert  = "";
-        spiel.minuswert = "";
-        fillTable();
-        closeSpielDialog();
-        return;
-    }
-
-    // 4. Nur bei normalen Spielen Punkte & Zähler behandeln
-    const basisWert = berechneSpielwert(spiel);
-    const spielwert = basisWert * (gewonnen ? 1 : 2);
-    const deltaNeu  = gewonnen ? spielwert : -spielwert;
-
-    // 5. Alten Zustand rückgängig machen, wenn Spieler gewechselt hat
-    if (alterSpielerVorher && alterSpielerVorher !== neuerSpieler) {
-        const altKey = `p${alterSpielerVorher}`;
-
-        // Delta entfernen
-        spiel[`${altKey}_delta`] = 0;
-
-        // Zähler korrigieren (nur wenn vorher ein gültiges Ergebnis vorlag)
-        if (warGewonnen === true) {
-            spiel[`${altKey}_gew`] = Math.max(0, (parseInt(spiel[`${altKey}_gew`]) || 0) - 1);
-        } else if (warGewonnen === false) {
-            spiel[`${altKey}_verl`] = Math.max(0, (parseInt(spiel[`${altKey}_verl`]) || 0) - 1);
-        }
-    }
-
-    // 6. Neuen Zustand setzen
-    const neuKey = `p${neuerSpieler}`;
-    spiel[`${neuKey}_delta`] = deltaNeu;
-
-    if (gewonnen) {
-        spiel[`${neuKey}_gew`]  = (parseInt(spiel[`${neuKey}_gew`])  || 0) + 1;
-        spiel[`${neuKey}_verl`] = parseInt(spiel[`${neuKey}_verl`]) || 0;
-    } else {
-        spiel[`${neuKey}_gew`]  = parseInt(spiel[`${neuKey}_gew`])  || 0;
-        spiel[`${neuKey}_verl`] = (parseInt(spiel[`${neuKey}_verl`]) || 0) + 1;
-    }
-
-    // 7. + / - Spalte
-    if (gewonnen) {
-        spiel.pluswert  = spielwert;
-        spiel.minuswert = "";
-    } else {
-        spiel.pluswert  = "";
-        spiel.minuswert = -spielwert;
     }
 
     fillTable();
