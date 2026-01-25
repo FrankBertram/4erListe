@@ -1345,8 +1345,25 @@ function saveGame(gewonnen) {
         alert("Bitte einen Spieler auswählen (außer bei Pass).");
         return;
     }
-
+ 
     const spiel = spielDaten[index];
+    
+    if (spiel.offen === "X" && grundwert!="23" && 
+    	(spiel.hand === "" || spiel.schneider === ""  || spiel.schneiderang === "" || spiel.schwarz === ""  || spiel.schwarzang === "")) {
+        alert("❌ Ouvert nur bei Hand + Schneider + Schneider Ang. + Schwarz + Schwarz Ang. möglich!");
+        return;
+    }    
+    if (spiel.schwarzang === "X" && 
+    	(spiel.hand === "" || spiel.schneider === ""  || spiel.schneiderang === "" || spiel.schwarz === "")) {
+        alert("❌ Schwarz angesagt nur bei Hand + Schneider + Schneider Ang. + Schwarz möglich!");
+        return;
+    }    
+    if (spiel.schneiderang === "X" && (spiel.hand === "" || spiel.schneider === "")) {
+        alert("❌ Schneider angesagt nur bei Hand + Schneider möglich!");
+        return;
+    }
+
+
 
     // 1. Alten Zustand merken – SEHR WICHTIG!
     const alterSpielerVorher = spiel.spieler;           // vorheriger Spieler
@@ -1377,10 +1394,18 @@ function saveGame(gewonnen) {
     spiel.mitSpitzen  = mit;
     spiel.ohneSpitzen = ohne;
 
+
     // 3. Bei Pass: nichts weiter berechnen
     if (istPass) {
         spiel.pluswert  = "";
         spiel.minuswert = "";
+        spiel.hand = "";
+        spiel.schneider = "";
+        spiel.schneiderang = "";
+        spiel.schwarz = "";
+        spiel.schwarzang = "";
+        spiel.offen = "";
+        spiel.mitSpitzen = 0;
         fillTable();
         closeSpielDialog();
         return;
@@ -1423,10 +1448,13 @@ function saveGame(gewonnen) {
         spiel.pluswert  = "";
         spiel.minuswert = -spielwert;              
     }
+    
+
 
     fillTable();
     closeSpielDialog();
 }
+
 document.querySelectorAll('input[name="karten"]').forEach(radio => {
   radio.addEventListener('change', function() {
     const kartenAnzahl = parseInt(this.value);
