@@ -298,7 +298,7 @@
   <div id="player-btn-container-2"></div>
   <div id="player-btn-container-3"></div>
   <div id="player-btn-container-4"></div>
-  <div id="csv-export-container"></div>
+  <div id="csv-export-container"></div> 
   
 </div>
 
@@ -801,62 +801,10 @@ function selectSpitze(value) {
   });
 }
 
-function generatePlayerButtons_Test(spielIndex) {
-  const container = document.getElementById("player-buttons");
-  container.innerHTML = "";
-
-  const führenderSpieler = (spielIndex % 4);
-  for (let i = 0; i < 4; i++) {
-    if (i === führenderSpieler) continue;
-
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = spielerNamen[i];
-    
-    // 🔥 Basis-Styling für ALLE Buttons (rot-thematisiert)
-    btn.style.cssText = `
-      margin-right: 5px; font-size: 16px; padding: 5px 10px;
-      cursor: pointer; height: 80px; border-radius: 6px;
-      border: 2px solid #e0e0e0; background: #ffebee; color: #c62828;
-      transition: all 0.2s; box-sizing: border-box;
-    `;
-
-    const ausgewaehlter = parseInt(document.getElementById("spiel-form").dataset.ausgewaehlterSpieler, 10);
-    if (ausgewaehlter === i + 1) {
-      // 🔥 AKTIV: Intensiv rot
-      btn.style.background = "#f44336";
-      btn.style.color = "#fff";
-      btn.style.borderColor = "#d32f2f";
-      btn.style.transform = "scale(1.02)";
-    }
-
-    btn.addEventListener("click", () => {
-      Array.from(container.children).forEach(b => {
-        // 🔥 Inaktiv: Hellrot
-        b.style.background = "#ffebee";
-        b.style.color = "#c62828";
-        b.style.borderColor = "#e0e0e0";
-        b.style.transform = "scale(1)";
-      });
-
-      // 🔥 Aktiv: Dunkelrot
-      btn.style.background = "#f44336";
-      btn.style.color = "#fff";
-      btn.style.borderColor = "#d32f2f";
-      btn.style.transform = "scale(1.02)";
-
-      document.getElementById("spiel-form").dataset.ausgewaehlterSpieler = i + 1;
-    });
-
-    container.appendChild(btn);
-  }
-}
-
-
 function generatePlayerButtons(spielIndex) {
   const container = document.getElementById("player-buttons");
   container.innerHTML = "";
-  
+
   const führenderSpieler = (spielIndex % 4);
   for (let i = 0; i < 4; i++) {
     if (i === führenderSpieler) continue;
@@ -868,6 +816,7 @@ function generatePlayerButtons(spielIndex) {
     btn.style.fontSize = "16px";
     btn.style.padding = "5px 5px";
     btn.style.cursor = "pointer";
+    btn.style.width = "200px";
     btn.style.height = "80px";
     btn.style.borderRadius = "6px";
 
@@ -1018,7 +967,7 @@ function downloadCSV(csv, filename) {
   }
 }
 
-const spielerNamen = ["Spieler 1 (SF)", "Spieler 2", "Spieler 3", "Spieler 4"];
+const spielerNamen = ["Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4"];
 
 function generatePlayerNameButtons() {
   const mitspielerListe = [
@@ -1579,8 +1528,9 @@ window.addEventListener("load", () => {
 
 
 </script>
+</script>
     <div style="font-size:8px;">
-    © 2026 by Frank Bertram (V2)
+    © 2026 by Frank Bertram (V3)
     </div> 
 </body>
 </html>
