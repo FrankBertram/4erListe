@@ -66,9 +66,9 @@
   background: #FFF9C4 !important;     /* Hellgelb */
   color: #000 !important;             /* Schwarz */
   border: 2px solid #F57F17 !important; /* Orange-Rand */
-  padding: 8px 12px;
+  padding: 6px 16px; 
   border-radius: 6px;
-  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
   flex-shrink: 0;
   transition: all 0.2s;
@@ -415,7 +415,7 @@
 
 <dialog id="spiel-dialog" style="padding:20px; border-radius:8px; width:625px; max-width:90%; font-size:15px;">
   <form method="dialog" id="spiel-form" style="display:flex; flex-direction:column; gap:10px;">
-    <h3 style="margin:0 0 5px 0; text-align:center;">Spiel eintragen:<span id="spielnummer-display"></span></h3>
+    <h3 style="margin:0 0 5px 0; text-align:center;">Spiel eintragen:  <span id="spielnummer-display"></span></h3>
 
     <div id="player-buttons" style="margin-bottom:5px;"></div>
     
@@ -737,7 +737,7 @@ function createButtonRow(spielIndex) {
 td.innerHTML = `
   <span style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
     <button onclick="openNewModal(${spielIndex})" class="neuer-eintrag-btn" style="flex-shrink: 0;">
-      📝 neuer Eintrag ...
+      📝 neuer Spieleintrag ...
     </button>
   </span>
 `;
@@ -880,11 +880,11 @@ function createCSVButton() {
   const csvBtn = document.createElement("button");
   csvBtn.innerHTML = "📊 Export CSV";
   csvBtn.style.cssText = `
-    padding: 7px 16px; 
+    padding: 6px 16px; 
     margin-left: auto;
     background: linear-gradient(135deg, #28a745, #20c997);
     color: white; border: none; border-radius: 6px;
-    font-size: 14px; cursor: pointer;
+    font-size: 15px; cursor: pointer;
     box-shadow: 0 4px 12px rgba(40,167,69,0.3); transition: transform 0.2s;
   `;
   csvBtn.addEventListener("mouseenter", () => csvBtn.style.transform = "scale(1.05)");
