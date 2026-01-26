@@ -298,6 +298,8 @@
   <div id="player-btn-container-2"></div>
   <div id="player-btn-container-3"></div>
   <div id="player-btn-container-4"></div>
+  <div id="csv-export-container"></div>
+  
 </div>
 
 <div class="table-wrapper" style="max-height:800px; overflow-y:auto;overflow-x:auto;">
@@ -799,10 +801,62 @@ function selectSpitze(value) {
   });
 }
 
-function generatePlayerButtons(spielIndex) {
+function generatePlayerButtons_Test(spielIndex) {
   const container = document.getElementById("player-buttons");
   container.innerHTML = "";
 
+  const führenderSpieler = (spielIndex % 4);
+  for (let i = 0; i < 4; i++) {
+    if (i === führenderSpieler) continue;
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = spielerNamen[i];
+    
+    // 🔥 Basis-Styling für ALLE Buttons (rot-thematisiert)
+    btn.style.cssText = `
+      margin-right: 5px; font-size: 16px; padding: 5px 10px;
+      cursor: pointer; height: 80px; border-radius: 6px;
+      border: 2px solid #e0e0e0; background: #ffebee; color: #c62828;
+      transition: all 0.2s; box-sizing: border-box;
+    `;
+
+    const ausgewaehlter = parseInt(document.getElementById("spiel-form").dataset.ausgewaehlterSpieler, 10);
+    if (ausgewaehlter === i + 1) {
+      // 🔥 AKTIV: Intensiv rot
+      btn.style.background = "#f44336";
+      btn.style.color = "#fff";
+      btn.style.borderColor = "#d32f2f";
+      btn.style.transform = "scale(1.02)";
+    }
+
+    btn.addEventListener("click", () => {
+      Array.from(container.children).forEach(b => {
+        // 🔥 Inaktiv: Hellrot
+        b.style.background = "#ffebee";
+        b.style.color = "#c62828";
+        b.style.borderColor = "#e0e0e0";
+        b.style.transform = "scale(1)";
+      });
+
+      // 🔥 Aktiv: Dunkelrot
+      btn.style.background = "#f44336";
+      btn.style.color = "#fff";
+      btn.style.borderColor = "#d32f2f";
+      btn.style.transform = "scale(1.02)";
+
+      document.getElementById("spiel-form").dataset.ausgewaehlterSpieler = i + 1;
+    });
+
+    container.appendChild(btn);
+  }
+}
+
+
+function generatePlayerButtons(spielIndex) {
+  const container = document.getElementById("player-buttons");
+  container.innerHTML = "";
+  
   const führenderSpieler = (spielIndex % 4);
   for (let i = 0; i < 4; i++) {
     if (i === führenderSpieler) continue;
@@ -814,7 +868,6 @@ function generatePlayerButtons(spielIndex) {
     btn.style.fontSize = "16px";
     btn.style.padding = "5px 5px";
     btn.style.cursor = "pointer";
-    btn.style.width = "200px";
     btn.style.height = "80px";
     btn.style.borderRadius = "6px";
 
@@ -840,7 +893,132 @@ function generatePlayerButtons(spielIndex) {
   }
 }
 
-const spielerNamen = ["Spieler 1", "Spieler 2", "Spieler 3", "Spieler 4"];
+function createCSVButton() {
+  const container = document.getElementById("csv-export-container");
+  if (!container || container.children.length > 0) return;
+  
+  const csvBtn = document.createElement("button");
+  csvBtn.innerHTML = "📊 Export CSV";
+  csvBtn.style.cssText = `
+    padding: 7px 16px; 
+    margin-left: auto;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white; border: none; border-radius: 6px;
+    font-size: 14px; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(40,167,69,0.3); transition: transform 0.2s;
+  `;
+  csvBtn.addEventListener("mouseenter", () => csvBtn.style.transform = "scale(1.05)");
+  csvBtn.addEventListener("mouseleave", () => csvBtn.style.transform = "scale(1)");
+  csvBtn.onclick = exportCSV;
+  container.appendChild(csvBtn);
+}
+
+function getInt(id) {
+  return parseInt(document.getElementById(id)?.textContent || 0, 10);
+}
+
+function exportCSV() {
+  const headers = [
+    'Nr','Grundwert','Mit','Ohne','Hand','Schneider','Schn.Ang','Schwarz','Schw.Ang','Offen','+', '-',
+    spielerNamen[0],'Gew1','Verl1',
+    spielerNamen[1],'Gew2','Verl2',
+    spielerNamen[2],'Gew3','Verl3',
+    spielerNamen[3],'Gew4','Verl4',
+    'Eingepasst'
+  ];
+
+  const csvRows = [headers];
+  
+  spielDaten.forEach(spiel => {
+    csvRows.push([
+      spiel.nr || '', spiel.grundwert || '', spiel.mitSpitzen || '', spiel.ohneSpitzen || '',
+      spiel.hand || '', spiel.schneider || '', spiel.schneiderang || '', spiel.schwarz || '',
+      spiel.schwarzang || '', spiel.offen || '', spiel.pluswert || '', spiel.minuswert || '',
+      spiel.p1_delta || '', spiel.p1_gew || '', spiel.p1_verl || '',
+      spiel.p2_delta || '', spiel.p2_gew || '', spiel.p2_verl || '',
+      spiel.p3_delta || '', spiel.p3_gew || '', spiel.p3_verl || '',
+      spiel.p4_delta || '', spiel.p4_gew || '', spiel.p4_verl || '',
+      spiel.eingepasst || ''
+    ]);
+  });
+
+  // ENDSUMMEN
+  csvRows.push([
+    '','','','','','','','','','','','',
+    document.getElementById('sum-p1')?.textContent || '',
+    document.getElementById('gew-p1')?.textContent || '',
+    document.getElementById('verl-p1')?.textContent || '',
+    document.getElementById('sum-p2')?.textContent || '',
+    document.getElementById('gew-p2')?.textContent || '',
+    document.getElementById('verl-p2')?.textContent || '',
+    document.getElementById('sum-p3')?.textContent || '',
+    document.getElementById('gew-p3')?.textContent || '',
+    document.getElementById('verl-p3')?.textContent || '',
+    document.getElementById('sum-p4')?.textContent || '',
+    document.getElementById('gew-p4')?.textContent || '',
+    document.getElementById('verl-p4')?.textContent || '',
+    document.getElementById('sum-eingepasst')?.textContent || ''
+  ]);
+  
+  const bonusG1 = getInt('verl-p2') + getInt('verl-p3') + getInt('verl-p4');
+  const bonusG2 = getInt('verl-p1') + getInt('verl-p3') + getInt('verl-p4');
+  const bonusG3 = getInt('verl-p1') + getInt('verl-p2') + getInt('verl-p4');
+  const bonusG4 = getInt('verl-p1') + getInt('verl-p2') + getInt('verl-p3');
+  const bonusP1 = getInt('gew-p1') - getInt('verl-p1');
+  const bonusP2 = getInt('gew-p2') - getInt('verl-p2');
+  const bonusP3 = getInt('gew-p3') - getInt('verl-p3');
+  const bonusP4 = getInt('gew-p4') - getInt('verl-p4');
+  const gesamtP1 = getInt('sum-p1') + bonusP1*50 + bonusG1*30;
+  const gesamtP2 = getInt('sum-p2') + bonusP2*50 + bonusG2*30;
+  const gesamtP3 = getInt('sum-p3') + bonusP3*50 + bonusG3*30;
+  const gesamtP4 = getInt('sum-p4') + bonusP4*50 + bonusG4*30;
+  
+    csvRows.push([
+    '','','','','','','','','','','','',
+    bonusP1 * 50, bonusP1, '',
+    bonusP2 * 50, bonusP2, '',
+    bonusP3 * 50, bonusP3, '',
+    bonusP4 * 50, bonusP4, '', '']);
+    csvRows.push([
+    '','','','','','','','','','','','',
+    bonusG1 * 30, bonusG1, '',
+    bonusG2 * 30, bonusG2, '',
+    bonusG3 * 30, bonusG3, '',
+    bonusG4 * 30, bonusG4, '', '']);
+    csvRows.push([
+    '','','','','','','','','','','','',
+    gesamtP1, '', '',
+    gesamtP2, '', '',
+    gesamtP3, '', '',
+    gesamtP4, '', '', '']);    
+  
+
+  // 🔥 SEMIKOLON + UTF-8 BOM
+  const csvContent = '\uFEFF' + csvRows.map(row => 
+    row.map(cell => `"${cell}"`).join(';')  // Semikolon!
+  ).join('\n');
+
+  const serieWert = document.querySelector('input[name="serie"]:checked')?.value || '0';
+  const tischWert = document.querySelector('input[name="tisch"]:checked')?.value || '0';
+  
+  downloadCSV(csvContent, `Spielliste_S${serieWert}_T${tischWert}_${new Date().toLocaleDateString('de-DE')}.csv`);
+}
+
+function downloadCSV(csv, filename) {
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement("a");
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+}
+
+const spielerNamen = ["Spieler 1 (SF)", "Spieler 2", "Spieler 3", "Spieler 4"];
 
 function generatePlayerNameButtons() {
   const mitspielerListe = [
@@ -959,110 +1137,6 @@ function generatePlayerNameButtons() {
 }
 
 
-function generatePlayerNameButtons_1() {
-  // Hier die Liste aller möglichen Mitspieler pflegen
-  // Du kannst sie jederzeit erweitern oder ändern
-  const mitspielerListe = [
-	"Bertram, Frank",
-	"Bleckmann, Norbert",
-	"Böllsterling, Gottfried",
-	"Bühl, Heinz",
-	"Faßbender, Kai",
-	"Gebhardt, Harry",
-	"Götte, Norbert",
-	"Grapatin, Alexander",
-	"Gruschka, Alfred",
-	"Heimann, Klaus-Dieter",
-	"Hetz, Michael",
-	"Holtkamp, Bodo",
-	"Jeske, Joachim",
-	"Langer, Kurt",
-	"Pestotnik, Ralf",
-	"Puls, Wilfried",
-	"Schekerka, Herbert",
-	"Schnecke, Dieter",
-	"Schwarz, Peter",
-	"Selzer, Bernhard",
-	"Stümpges, Achim",
-	"Gast 1",
-	"Gast 2",
-	"Gast 3"
-	  ];
-
-  for (let pos = 1; pos <= 4; pos++) {
-    const container = document.getElementById(`player-btn-container-${pos}`);
-    if (!container) continue;
-
-    container.innerHTML = "";
-
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = spielerNamen[pos - 1] || `Spieler ${pos}`;
-    btn.style.fontSize = "15px";
-    btn.style.padding = "6px 12px";
-    btn.style.cursor = "pointer";
-
-    btn.addEventListener("click", () => {
-      // Dropdown erzeugen
-      const select = document.createElement("select");
-      select.style.fontSize = "15px";
-      select.style.padding = "4px 8px";
-      select.style.minWidth = "250px";
-      select.style.maxWidth = "300px";
-      select.style.width = "100%";
-      select.style.marginTop = "4px";
-
-      // Platzhalter
-      const optDefault = document.createElement("option");
-      optDefault.value = "";
-      optDefault.text = "— Namen wählen —";
-      select.appendChild(optDefault);
-
-      // Alle Mitspieler einfügen + aktuellen Namen vorauswählen
-      const aktuell = spielerNamen[pos - 1];
-      mitspielerListe.forEach(name => {
-        const opt = document.createElement("option");
-        opt.value = name;
-        opt.text = name;
-        if (name === aktuell) opt.selected = true;
-        select.appendChild(opt);
-      });
-
-      // Bei Auswahl: Namen übernehmen + Dropdown entfernen
-      select.addEventListener("change", () => {
-        const neuerName = select.value.trim();
-        if (neuerName) {
-          spielerNamen[pos - 1] = neuerName;
-          btn.textContent = neuerName;
-          updatePlayerNamesInTable();
-        }
-
-        // Dropdown entfernen, Button wieder zeigen
-        container.removeChild(select);
-        container.appendChild(btn);
-      });
-
-      // Button ausblenden, Dropdown einfügen
-      container.removeChild(btn);
-      container.appendChild(select);
-
-      // Fokus setzen
-      select.focus();
-
-      // Optional: Bei Klick außerhalb schließen
-      const closeOnOutside = (e) => {
-        if (!container.contains(e.target)) {
-          container.removeChild(select);
-          container.appendChild(btn);
-          document.removeEventListener("click", closeOnOutside);
-        }
-      };
-      setTimeout(() => document.addEventListener("click", closeOnOutside), 0);
-    });
-
-    container.appendChild(btn);
-  }
-}
 
 function generateGewinnstufenButtons(spielIndex) {
   const container = document.getElementById("gewinnstufen-buttons");
@@ -1353,19 +1427,20 @@ function saveGame(gewonnen) {
         alert("❌ Ouvert nur bei Hand + Schneider + Schneider Ang. + Schwarz + Schwarz Ang. möglich!");
         return;
     }    
-    if (spiel.schwarz === "X" && spiel.schneider === "") {
-        alert("❌ Schwarz nur bei Schneider möglich!");
-        return;
-    }  	
     if (spiel.schwarzang === "X" && 
     	(spiel.hand === "" || spiel.schneider === ""  || spiel.schneiderang === "" || spiel.schwarz === "")) {
         alert("❌ Schwarz angesagt nur bei Hand + Schneider + Schneider Ang. + Schwarz möglich!");
+        return;
+    }    
+    if (spiel.schwarz === "X" && spiel.schneider === "") {
+        alert("❌ Schwarz nur bei Schneider möglich!");
         return;
     }    
     if (spiel.schneiderang === "X" && (spiel.hand === "" || spiel.schneider === "")) {
         alert("❌ Schneider angesagt nur bei Hand + Schneider möglich!");
         return;
     }
+ 
 
 
 
@@ -1398,10 +1473,10 @@ function saveGame(gewonnen) {
     spiel.mitSpitzen  = mit;
     spiel.ohneSpitzen = ohne;
 
-	if (spiel.schwarz === "X" && spiel.mitSpitzen === 0) {
+    if (spiel.schwarz === "X" && spiel.mitSpitzen === 0) {
         alert("❌ Schwarz ohne Kreuz Bube nicht möglich!");
         return;
-    } 
+    }       
 
     // 3. Bei Pass: nichts weiter berechnen
     if (istPass) {
@@ -1499,10 +1574,13 @@ document.querySelectorAll('input[name="karten"]').forEach(radio => {
 window.addEventListener("load", () => {
   fillTable();
   generatePlayerNameButtons();
+  createCSVButton();  
 });
 
 
 </script>
-
+    <div style="font-size:8px;">
+    © 2026 by Frank Bertram (V2)
+    </div> 
 </body>
 </html>
