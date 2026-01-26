@@ -1039,7 +1039,7 @@ function generatePlayerNameButtons() {
     btn.style.padding = "6px 12px";
     btn.style.cursor = "pointer";
     btn.style.minWidth = "100px";
-    btn.style.borderRadius = "6px";	  
+    btn.style.borderRadius = "6px";
 
     btn.addEventListener("click", () => {
       // Dropdown erzeugen (bestehend)
@@ -1119,7 +1119,6 @@ function generatePlayerNameButtons() {
 }
 
 
-
 function generateGewinnstufenButtons(spielIndex) {
   const container = document.getElementById("gewinnstufen-buttons");
   container.innerHTML = "";
@@ -1162,6 +1161,55 @@ function generateGewinnstufenButtons(spielIndex) {
     btn.addEventListener("click", () => {
       data[key] = data[key] === "X" ? "" : "X";
       btn.classList.toggle("active");
+      
+	  // Schwarz angesagt
+	  if (label === "Schw.ang.") {
+		if (data.schwarzang === "X" && data.schwarz !== "X") { 
+		  data.schwarz = "X";
+		  const setBtn = Array.from(container.children).find(b => b.innerHTML.includes("Schwarz"));
+		  if (setBtn) {setBtn.classList.add("active");}
+		}  
+		if (data.schwarzang === "X" && data.schneiderang !== "X") { 
+		  data.schneiderang = "X";
+		  const setBtn = Array.from(container.children).find(b => b.innerHTML.includes("Schn."));
+		  if (setBtn) {setBtn.classList.add("active");}
+		}  
+		if (data.schwarzang === "X" && data.schneider !== "X") { 
+		  data.schneider = "X";
+		  const setBtn = Array.from(container.children).find(b => b.innerHTML.includes("Schneider"));
+		  if (setBtn) {setBtn.classList.add("active");}
+		}  
+		if (data.schwarzang === "X" && data.hand !== "X") {
+		  data.hand = "X";
+		  const setBtn = Array.from(container.children).find(b => b.innerHTML.includes("Hand"));
+		  if (setBtn) {setBtn.classList.add("active");}
+		}
+	  }  	      
+
+      
+	  // Schwarz 
+	  if (label === "Schwarz") {
+		if (data.schwarz === "X" && data.schneider !== "X") { 
+		  data.schneider = "X";
+		  const setBtn = Array.from(container.children).find(b => b.innerHTML.includes("Schneider"));
+		  if (setBtn) {setBtn.classList.add("active");}
+		}  
+	  }  	  
+      
+	  // Schneider angesagt 
+	  if (label === "Schn.ang.") {
+		if (data.schneiderang === "X" && data.schneider !== "X") { 
+		  data.schneider = "X";
+		  const setBtn = Array.from(container.children).find(b => b.innerHTML.includes("Schneider"));
+		  if (setBtn) {setBtn.classList.add("active");}
+		}  
+		if (data.schneiderang === "X" && data.hand !== "X") {
+		  data.hand = "X";
+		  const setBtn = Array.from(container.children).find(b => b.innerHTML.includes("Hand"));
+		  if (setBtn) {setBtn.classList.add("active");}
+		}
+	  }  	      
+
       fillTable();
     });
 
@@ -1563,7 +1611,7 @@ window.addEventListener("load", () => {
 </script>
 </script>
     <div style="font-size:8px;">
-    © 2026 by Frank Bertram (V3)
+    © 2026 by Frank Bertram (V4)
     </div> 
 </body>
 </html>
