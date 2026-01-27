@@ -528,23 +528,38 @@ spielDaten = Array(kartenDefault).fill(null).map((_, i) => ({
   spieler: ""
 }));
 
-    function autoScalePage() {
-      const width = screen.width;
+function setStickyByScale(scale) {
+  const tfoot = document.querySelector('#skat-table tfoot');
+  if (scale === 1.0) {
+    tfoot.style.position = 'sticky';
+    tfoot.style.bottom = '0';
+    tfoot.style.zIndex = '3';
+  } else {
+    tfoot.style.position = 'static';
+    tfoot.style.bottom = '';
+    tfoot.style.zIndex = '';
+  }
+}
 
-      if (width >= 825) scale = 1.0;
-      else scale = width / 825;
+function autoScalePage() {
+  const width = screen.width;
 
-      const comp = 100 / scale;
-      const html = document.documentElement;
-      html.style.transform = `scale(${scale})`;
-      html.style.transformOrigin = '0 0';
-      html.style.width = comp + '%';
-      html.style.height = comp + '%';
-      html.style.overflow = 'hidden';
-    }
-    window.addEventListener('load', autoScalePage);
-//    window.addEventListener('resize', autoScalePage);
-//    window.addEventListener('orientationchange', autoScalePage);    
+  if (width >= 810) scale = 1.0;
+  else scale = width / 825;
+
+  const comp = 100 / scale;
+  const html = document.documentElement;
+  html.style.transform = `scale(${scale})`;
+  html.style.transformOrigin = '0 0';
+  html.style.width = comp + '%';
+  html.style.height = comp + '%';
+  html.style.overflow = 'hidden';
+  
+  setStickyByScale(scale);
+}
+window.addEventListener('load', autoScalePage);
+window.addEventListener('resize', autoScalePage);
+window.addEventListener('orientationchange', autoScalePage);    
 
 function fillTable() {
   const tbody = document.getElementById("game-rows");
