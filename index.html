@@ -506,6 +506,8 @@
 
 <script>
 let spielDaten = [];  // Leer starten
+let scale = 1.0;
+
 
 // Direkt nach der Deklaration:
 const kartenDefault = 36;
@@ -523,6 +525,25 @@ spielDaten = Array(kartenDefault).fill(null).map((_, i) => ({
   eingepasst: "",
   spieler: ""
 }));
+
+    function autoScalePage() {
+      const width = screen.width;
+
+      if (width >= 1024) scale = 0.8;
+      else if (width >= 768) scale = 0.8;
+      else scale = 0.6;
+
+      const comp = 100 / scale;
+      const html = document.documentElement;
+      html.style.transform = `scale(${scale})`;
+      html.style.transformOrigin = '0 0';
+      html.style.width = comp + '%';
+      html.style.height = comp + '%';
+      html.style.overflow = 'hidden';
+    }
+    window.addEventListener('load', autoScalePage);
+    window.addEventListener('resize', autoScalePage);
+    window.addEventListener('orientationchange', autoScalePage);    
 
 function fillTable() {
   const tbody = document.getElementById("game-rows");
@@ -1354,7 +1375,12 @@ function getCurrentSpielIndex() {
 function openNewModal(spielIndex = null) {
   const dialog = document.getElementById("spiel-dialog");
   const spielNummerSpan = document.getElementById("spielnummer-display");
-
+  const spieleAnz = document.querySelector('input[name="karten"]:checked')?.value || '0';  
+  
+  // ── Scale dynamisch setzen ──
+  dialog.style.transform = `scale(${scale*0.9})`;  //10% kleiner
+  dialog.style.transformOrigin = 'top center';
+  
   // ── NEU: immer erstmal alles zurücksetzen ────────────────────────
   resetButtons();           // ← ruft die bestehende Reset-Funktion auf
   document.getElementById("grundwert").value = "";
@@ -1372,7 +1398,7 @@ function openNewModal(spielIndex = null) {
     
     generatePlayerButtons(spielIndex);
     generateGewinnstufenButtons(spielIndex);
-    spielNummerSpan.textContent = spiel.nr;
+    spielNummerSpan.textContent = spiel.nr + ' / '+spieleAnz;
 
     // Buttons für den gespeicherten Grundwert wieder aktivieren
     const grundwertMapReverse = {
@@ -1452,6 +1478,25 @@ document.getElementById("btn-verloren").addEventListener("click", () => {
   saveGame(false);  // false = verloren
 });
 
+function getTabletResolution() {
+  const width = screen.width;
+  const height = screen.height;
+  const pixelRatio = window.devicePixelRatio || 1;  // Retina/High-DPI (z.B. iPad)
+  const realWidth = Math.round(width * pixelRatio);
+  const realHeight = Math.round(height * pixelRatio);
+  
+  console.log(`Viewport: ${window.innerWidth} x ${window.innerHeight}`);
+  console.log(`Screen: ${width} x ${height} (CSS-Pixel)`);
+  console.log(`Real Resolution: ${realWidth} x ${realHeight} (physisch)`);
+  console.log(`Pixel Ratio: ${pixelRatio}x`);
+  
+  // Tablet-Erkennung (optional)
+  if ((width >= 768 && width <= 1366) || (height >= 768 && height <= 1366)) {
+    console.log('Gerät: Wahrscheinlich Tablet!');
+  }
+  
+  return { width, height, realWidth, realHeight, pixelRatio };
+}
 
 
 function saveGame(gewonnen) {
@@ -1636,13 +1681,13 @@ window.addEventListener("load", () => {
   fillTable();
   generatePlayerNameButtons();
   createCSVButton();  
+  console.log(screen.width + 'x' + screen.height);  // Schnell-Check
 });
 
 
 </script>
-</script>
     <div style="font-size:8px;">
-    © 2026 by Frank Bertram (V4a)
+    © 2026 by Frank Bertram (V5)
     </div> 
 </body>
 </html>
