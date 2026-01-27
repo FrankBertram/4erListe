@@ -297,6 +297,8 @@
       bottom: 0;
       z-index: 3;
     }
+    
+    
 
     #skat-table tfoot td {
       background: #f0f0f0;
@@ -529,9 +531,8 @@ spielDaten = Array(kartenDefault).fill(null).map((_, i) => ({
     function autoScalePage() {
       const width = screen.width;
 
-      if (width >= 800) scale = 1.0;
-      else if (width >= 750) scale = 0.8;
-      else scale = 0.6;
+      if (width >= 825) scale = 1.0;
+      else scale = width / 825;
 
       const comp = 100 / scale;
       const html = document.documentElement;
@@ -542,8 +543,8 @@ spielDaten = Array(kartenDefault).fill(null).map((_, i) => ({
       html.style.overflow = 'hidden';
     }
     window.addEventListener('load', autoScalePage);
-    window.addEventListener('resize', autoScalePage);
-    window.addEventListener('orientationchange', autoScalePage);    
+//    window.addEventListener('resize', autoScalePage);
+//    window.addEventListener('orientationchange', autoScalePage);    
 
 function fillTable() {
   const tbody = document.getElementById("game-rows");
