@@ -357,7 +357,7 @@
   
 </div>
 
-<div class="table-wrapper" style="max-height:800px; overflow-y:auto;overflow-x:auto;">
+<div class="table-wrapper" style="max-height:600px; overflow-y:auto;overflow-x:auto;">
 <table id="skat-table">
   <thead>
     <tr>
@@ -541,6 +541,21 @@ function setStickyByScale(scale) {
   }
 }
 
+function setTableHeight() {
+  const screenH = screen.height;
+  const wrapper = document.querySelector('.table-wrapper');
+  
+  let maxH;
+  if (screenH >= 1200) maxH = '1100px';      // Desktop
+  else if (screenH >= 900) maxH = '70vh';  // Tablet Landscape
+  else if (screenH >= 700) maxH = '60vh';  // Portrait
+  else maxH = '500px';                     // Klein
+  maxH = screenH - 200;
+  
+  wrapper.style.maxHeight = maxH + 'px';
+  wrapper.style.height = maxH;  // Optional: Feste Höhe
+}
+
 function autoScalePage() {
   const width = screen.width;
 
@@ -556,6 +571,7 @@ function autoScalePage() {
   html.style.overflow = 'hidden';
   
   setStickyByScale(scale);
+  setTableHeight();
 }
 window.addEventListener('load', autoScalePage);
 window.addEventListener('resize', autoScalePage);
@@ -1694,8 +1710,9 @@ document.querySelectorAll('input[name="karten"]').forEach(radio => {
 
 function updateCopyright() {
   const width = screen.width;
+  const height = screen.height;
   document.getElementById('copyright').innerHTML = 
-    `© 2026 by Frank Bertram (V5) | Width: ${width}px | Scale: ${scale}`;
+    `© 2026 by Frank Bertram (V5) | Width: ${width}px | Height: ${height}px | Scale: ${scale}`;
 }
 
 
