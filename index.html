@@ -1676,17 +1676,24 @@ document.querySelectorAll('input[name="karten"]').forEach(radio => {
   });
 });
 
+function updateCopyright() {
+  const width = screen.width;
+  document.getElementById('copyright').innerHTML = 
+    `© 2026 by Frank Bertram (V5) | Width: ${width}px | Scale: ${scale}`;
+}
+
 
 window.addEventListener("load", () => {
   fillTable();
   generatePlayerNameButtons();
   createCSVButton();  
+  updateCopyright();
   console.log(screen.width + 'x' + screen.height);  // Schnell-Check
 });
 
 
 </script>
-    <div style="font-size:8px;">
+    <div id="copyright" style="font-size:8px;">
     © 2026 by Frank Bertram (V5)
     </div> 
 </body>
