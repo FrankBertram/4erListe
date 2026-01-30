@@ -558,7 +558,7 @@ function setTableHeight() {
   else if (screenH >= 700) maxH = '60vh';  // Portrait
   else maxH = '500px';                 // Klein
   if (isLandscape) { maxH = screenH - 385;} 
-  else { maxH = screenH - 250;} 
+  else { maxH = screenH - 200;} 
   maxW = screenW + 100;
   
   wrapper.style.maxHeight = maxH + 'px';
@@ -593,6 +593,7 @@ function autoScalePage() {
   
   setStickyByScale(scale);
   setTableHeight();
+  updateCopyright();  	
   
   // Debug (optional)
   console.log(`Landscape: ${isLandscape}, Width: ${width}x${height}, Scale: ${scale.toFixed(2)}`);
