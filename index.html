@@ -558,7 +558,7 @@ function setTableHeight() {
   else if (screenH >= 700) maxH = '60vh';  // Portrait
   else maxH = '500px';                 // Klein
   if (isLandscape) { maxH = screenH - 385;} 
-  else { maxH = screenH - 100;} 
+  else { maxH = screenH - 250;} 
   maxW = screenW + 100;
   
   wrapper.style.maxHeight = maxH + 'px';
@@ -1755,7 +1755,7 @@ function updateCopyright() {
   const width = screen.width;
   const height = screen.height;
   document.getElementById('copyright').innerHTML = 
-    `© 2026 by Frank Bertram (V5d) | Width: ${width}px | Height: ${height}px | Scale: ${scale}`;
+    `© 2026 by Frank Bertram (V6) | Width: ${width}px | Height: ${height}px | Scale: ${scale}`;
 }
 
 
