@@ -265,12 +265,15 @@
       border-bottom: 1px solid #333;
       background: transparent;
     }
+    
+
+    
     #skat-table thead th {
       position: sticky;
       background: #f0f0f0;
       border-bottom: 2px solid #ccc;
       text-align: center;
-	  font-size: 12px; 	
+	  font-size: 11px; 	
 	  font-weight: 400;
 	  color: black;
       padding: 4px 6px;
@@ -283,7 +286,7 @@
     }
 
     #skat-table thead tr:nth-child(2) th {
-      top: 32px;
+      top: 35px;
       z-index: 2;
     }
 
@@ -301,6 +304,7 @@
       padding: 4px 6px;
       text-align: center;
     }
+
 
   </style>
 </head>
@@ -524,8 +528,12 @@ spielDaten = Array(kartenDefault).fill(null).map((_, i) => ({
 }));
 
 function setStickyByScale(scale) {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const isLandscape = width > height;
+  
   const tfoot = document.querySelector('#skat-table tfoot');
-  if (scale === 1.0) {
+  if (scale !== 1.0) {
     tfoot.style.position = 'sticky';
     tfoot.style.bottom = '0';
     tfoot.style.zIndex = '3';
@@ -534,20 +542,23 @@ function setStickyByScale(scale) {
     tfoot.style.bottom = '';
     tfoot.style.zIndex = '';
   }
+
 }
 
 function setTableHeight() {
-  const screenH = screen.height;
-  const screenW = screen.width;
+  const screenH = window.innerHeight; //screen.height;
+  const screenW = window.innerWidth; //screen.width;
   const wrapper = document.querySelector('.table-wrapper');
+  const isLandscape = screenW > screenH;
   
   let maxH;
   let maxW;
   if (screenH >= 1200) maxH = '1100px';      // Desktop
   else if (screenH >= 900) maxH = '70vh';  // Tablet Landscape
   else if (screenH >= 700) maxH = '60vh';  // Portrait
-  else maxH = '500px';                     // Klein
-  maxH = screenH - 300;
+  else maxH = '500px';                 // Klein
+  if (isLandscape) { maxH = screenH - 385;} 
+  else { maxH = screenH - 100;} 
   maxW = screenW + 100;
   
   wrapper.style.maxHeight = maxH + 'px';
@@ -557,6 +568,38 @@ function setTableHeight() {
 }
 
 function autoScalePage() {
+  const width = window.innerWidth; //screen.width;
+  const height = window.innerHeight; //screen.height;
+  const isLandscape = width > height;  // ← Landscape erkennen
+
+  let scale = 1.0;
+
+  if (isLandscape) {
+    // Querformat: GRÖßER machen
+    scale = 1.35;  // oder 1.15 testen
+  } else {
+    // Hochformat: deine bisherige Logik
+    if (width >= 810) scale = 1.0;
+    else scale = width / 825;
+  }
+
+  const comp = 100 / scale;
+  const html = document.documentElement;
+  html.style.transform = `scale(${scale})`;
+  html.style.transformOrigin = '0 0';
+  html.style.width = comp + '%';
+  html.style.height = comp + '%';
+  html.style.overflow = 'hidden';
+  
+  setStickyByScale(scale);
+  setTableHeight();
+  
+  // Debug (optional)
+  console.log(`Landscape: ${isLandscape}, Width: ${width}x${height}, Scale: ${scale.toFixed(2)}`);
+}
+
+
+function autoScalePage_1() {
   const width = screen.width;
 
   if (width >= 810) scale = 1.0;
@@ -1712,7 +1755,7 @@ function updateCopyright() {
   const width = screen.width;
   const height = screen.height;
   document.getElementById('copyright').innerHTML = 
-    `© 2026 by Frank Bertram (V5c) | Width: ${width}px | Height: ${height}px | Scale: ${scale}`;
+    `© 2026 by Frank Bertram (V5d) | Width: ${width}px | Height: ${height}px | Scale: ${scale}`;
 }
 
 
