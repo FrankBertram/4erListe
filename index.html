@@ -241,7 +241,7 @@
     }
 
 	.vertical-left {
-	  writing-mode: vertical-rl;     /* Von unten nach oben */
+	  writing-mode: vertical-lr;     /* Von unten nach oben */
 	  text-orientation: mixed;       /* Buchstaben aufrecht */
 	  white-space: nowrap;
 	  vertical-align: bottom;        /* Unten in Zelle */
@@ -544,10 +544,23 @@ function setStickyByScale(scale) {
 }
 
 function setTableHeight() {
+  const swidth = screen.width;	
   const screenH = window.innerHeight; //screen.height;
   const screenW = window.innerWidth; //screen.width;
   const wrapper = document.querySelector('.table-wrapper');
   const isLandscape = screenW > screenH;
+  
+  let scale = 1.0;
+
+  if (isLandscape) {
+    // Querformat: GRÖßER machen
+    scale = 1.35;  // oder 1.15 testen
+    if (swidth>=1200) scale = 1.0;
+  } else {
+    // Hochformat: deine bisherige Logik
+    if (screenW >= 810) scale = 1.0;
+    else scale = screenW / 825;
+  }
   
   let maxH;
   let maxW;
@@ -555,9 +568,10 @@ function setTableHeight() {
   else if (screenH >= 900) maxH = '70vh';  // Tablet Landscape
   else if (screenH >= 700) maxH = '60vh';  // Portrait
   else maxH = '500px';                 // Klein
-  if (isLandscape) { maxH = screenH - 385;} 
-  else { maxH = screenH - 200;} 
+  if (isLandscape) { maxH = screenH - 185;} 
+  else { maxH = screenH - 150;} 
   maxW = screenW + 100;
+  maxH = maxH / scale;
   
   wrapper.style.maxHeight = maxH + 'px';
   wrapper.style.height = maxH + 'px';  // Optional: Feste Höhe
@@ -566,6 +580,7 @@ function setTableHeight() {
 }
 
 function autoScalePage() {
+  const swidth = screen.width;	
   const width = window.innerWidth; //screen.width;
   const height = window.innerHeight; //screen.height;
   const isLandscape = width > height;  // ← Landscape erkennen
@@ -575,12 +590,14 @@ function autoScalePage() {
   if (isLandscape) {
     // Querformat: GRÖßER machen
     scale = 1.35;  // oder 1.15 testen
+    if (swidth>=1200) scale = 1.0;
   } else {
     // Hochformat: deine bisherige Logik
     if (width >= 810) scale = 1.0;
     else scale = width / 825;
   }
-
+  
+  
   const comp = 100 / scale;
   const html = document.documentElement;
   html.style.transform = `scale(${scale})`;
@@ -750,8 +767,9 @@ function fillTable() {
     // Dein Streifen-Styling
     const colMap = [13, 16, 19, 22];
     const mod = (data.nr - 1) % 4;
-    row.querySelector(`td:nth-child(${colMap[mod]})`).style.background =
-      "repeating-linear-gradient(-45deg, #ddd, #ddd 3px, #fff 3px, #fff 6px)";
+    row.querySelector(`td:nth-child(${colMap[mod]})`).style.background = "repeating-linear-gradient(-45deg, #ddd, #ddd 3px, #fff 3px, #fff 6px)";
+    row.querySelector(`td:nth-child(${colMap[mod]+1})`).style.background = "repeating-linear-gradient(-45deg, #ddd, #ddd 3px, #fff 3px, #fff 6px)";
+    row.querySelector(`td:nth-child(${colMap[mod]+2})`).style.background = "repeating-linear-gradient(-45deg, #ddd, #ddd 3px, #fff 3px, #fff 6px)";
 
     tbody.appendChild(row);
   });
@@ -1782,7 +1800,7 @@ function updateCopyright() {
   const width = screen.width;
   const height = screen.height;
   document.getElementById('copyright').innerHTML = 
-    `© 2026 by Frank Bertram (V7) | Width: ${width}px | Height: ${height}px | Scale: ${scale}`;
+    `© 2026 by Frank Bertram (V8) | Width: ${width}px | Height: ${height}px | Scale: ${scale}`;
 }
 
 
